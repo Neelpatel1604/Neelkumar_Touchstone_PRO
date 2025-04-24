@@ -1,0 +1,65 @@
+<div class="flag-results">
+    <!-- Eligibility Summary -->
+    <div class="eligibility-summary mb-4">
+      <p-message *ngIf="evaluationResult?.isEligible" severity="success" text="The candidate is eligible based on the provided information." styleClass="w-full"></p-message>
+      <p-message *ngIf="!evaluationResult?.isEligible" severity="error" text="The candidate is not eligible based on the provided information." styleClass="w-full"></p-message>
+    </div>
+  
+    <!-- Red Flags Section -->
+    <p-card *ngIf="redFlags.length > 0" header="Red Flags (Ineligible)" styleClass="mb-4 red-flag-card">
+      <ng-container *ngFor="let categoryGroup of getFlagsByCategoryForDisplay(redFlags)">
+        <h3>{{ categoryGroup.category }}</h3>
+        <p-table [value]="categoryGroup.flags" styleClass="p-datatable-sm mb-4">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Field</th>
+              <th>Status</th>
+              <th>Message</th>
+              <th style="width: 10rem">Acknowledge</th>
+              <th style="width: 10rem">Override</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-flag>
+            <tr>
+              <td>{{ flag.field }}</td>
+              <td>
+                <p-tag [style]="{'backgroundColor': getSeverity(flag.status) === 'success' ? '#4CAF50' : '#f44336'}" [value]="flag.status"></p-tag>
+              </td>
+              <td>{{ flag.message }}</td>
+              <td>
+                <p-checkbox [(ngModel)]="flag.acknowledged" [binary]="true" (onChange)="acknowledgeFlag(flag)"></p-checkbox>
+              </td>
+              <td>
+                <p-checkbox [(ngModel)]="flag.overridden" [binary]="true" (onChange)="overrideFlag(flag)"></p-checkbox>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-container>
+    </p-card>
+  
+    <!-- Green Flags Section -->
+    <p-card *ngIf="greenFlags.length > 0" header="Green Flags (Eligible)" styleClass="green-flag-card">
+      <ng-container *ngFor="let categoryGroup of getFlagsByCategoryForDisplay(greenFlags)">
+        <h3>{{ categoryGroup.category }}</h3>
+        <p-table [value]="categoryGroup.flags" styleClass="p-datatable-sm mb-4">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Field</th>
+              <th>Status</th>
+              <th>Message</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-flag>
+            <tr>
+              <td>{{ flag.field }}</td>
+              <td>
+                <p-tag [style]="{'backgroundColor': getSeverity(flag.status) === 'success' ? '#4CAF50' : '#f44336'}" [value]="flag.status"></p-tag>
+              </td>
+              <td>{{ flag.message }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-container>
+    </p-card>
+  </div>

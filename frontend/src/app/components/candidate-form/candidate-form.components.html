@@ -1,0 +1,274 @@
+<div class="container">
+    <p-toast></p-toast>
+    
+    <p-card header="Candidate Eligibility Assessment" styleClass="p-mt-4">
+      <form [formGroup]="candidateForm" (ngSubmit)="onSubmit()">
+        <!-- Personal Information Section -->
+        <p-card header="Personal Information" styleClass="p-mb-3">
+          <div class="grid">
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="firstName" class="font-bold">First Name *</label>
+                <input id="firstName" type="text" pInputText formControlName="firstName" class="w-full">
+                <small *ngIf="candidateForm.get('firstName')?.invalid && candidateForm.get('firstName')?.touched" class="p-error">
+                  First name is required
+                </small>
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="lastName" class="font-bold">Last Name *</label>
+                <input id="lastName" type="text" pInputText formControlName="lastName" class="w-full">
+                <small *ngIf="candidateForm.get('lastName')?.invalid && candidateForm.get('lastName')?.touched" class="p-error">
+                  Last name is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="email" class="font-bold">Email *</label>
+                <input id="email" type="email" pInputText formControlName="email" class="w-full">
+                <small *ngIf="candidateForm.get('email')?.invalid && candidateForm.get('email')?.touched" class="p-error">
+                  Valid email is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="dateOfBirth" class="font-bold">Date of Birth *</label>
+                <p-calendar id="dateOfBirth" formControlName="dateOfBirth" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+                <small *ngIf="candidateForm.get('dateOfBirth')?.invalid && candidateForm.get('dateOfBirth')?.touched" class="p-error">
+                  Date of birth is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="legalStatus" class="font-bold">Legal Status *</label>
+                <p-dropdown id="legalStatus" [options]="legalStatusOptions" formControlName="legalStatus" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Legal Status" class="w-full"></p-dropdown>
+                <small *ngIf="candidateForm.get('legalStatus')?.invalid && candidateForm.get('legalStatus')?.touched" class="p-error">
+                  Legal status is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- Medical Education Section -->
+        <p-card header="Medical Education" styleClass="p-mb-3 p-mt-3">
+          <div class="grid">
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="medicalSchool" class="font-bold">Medical School *</label>
+                <input id="medicalSchool" type="text" pInputText formControlName="medicalSchool" class="w-full">
+                <small *ngIf="candidateForm.get('medicalSchool')?.invalid && candidateForm.get('medicalSchool')?.touched" class="p-error">
+                  Medical school is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="degree" class="font-bold">Degree *</label>
+                <input id="degree" type="text" pInputText formControlName="degree" class="w-full">
+                <small *ngIf="candidateForm.get('degree')?.invalid && candidateForm.get('degree')?.touched" class="p-error">
+                  Degree is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="graduationYear" class="font-bold">Graduation Year *</label>
+                <p-inputNumber id="graduationYear" formControlName="graduationYear" [min]="1950" [max]="2023" class="w-full"></p-inputNumber>
+                <small *ngIf="candidateForm.get('graduationYear')?.invalid && candidateForm.get('graduationYear')?.touched" class="p-error">
+                  Valid graduation year is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="languageOfEducation" class="font-bold">Language of Education *</label>
+                <input id="languageOfEducation" type="text" pInputText formControlName="languageOfEducation" class="w-full">
+                <small *ngIf="candidateForm.get('languageOfEducation')?.invalid && candidateForm.get('languageOfEducation')?.touched" class="p-error">
+                  Language of education is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- Examinations Section -->
+        <p-card header="Examinations" styleClass="p-mb-3 p-mt-3">
+          <div class="grid">
+            <div class="col-12 md:col-4">
+              <div class="field">
+                <label for="nacDate" class="font-bold">NAC Date</label>
+                <p-calendar id="nacDate" formControlName="nacDate" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-4">
+              <div class="field">
+                <label for="mccqe1Date" class="font-bold">MCCQE1 Date</label>
+                <p-calendar id="mccqe1Date" formControlName="mccqe1Date" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-4">
+              <div class="field">
+                <label for="mccqe2Date" class="font-bold">MCCQE2 Date</label>
+                <p-calendar id="mccqe2Date" formControlName="mccqe2Date" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- TDM Results & License Section -->
+        <p-card header="TDM Results & License" styleClass="p-mb-3 p-mt-3">
+          <div class="grid">
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="writtenTDM" class="font-bold d-block">Written TDM *</label>
+                <p-dropdown id="writtenTDM" [options]="tdmOptions" formControlName="writtenTDM" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select TDM Status" class="w-full"></p-dropdown>
+                <small *ngIf="candidateForm.get('writtenTDM')?.invalid && candidateForm.get('writtenTDM')?.touched" class="p-error">
+                  TDM status is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="hasCanadianDrivingLicense" class="font-bold d-block">Canadian Driving License</label>
+                <div class="field-checkbox mt-3">
+                  <p-checkbox formControlName="hasCanadianDrivingLicense" [binary]="true" inputId="hasCanadianDrivingLicense"></p-checkbox>
+                  <label for="hasCanadianDrivingLicense">Has valid Canadian driving license</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- Practice Experience Section -->
+        <p-card header="Practice Experience" styleClass="p-mb-3 p-mt-3">
+          <div class="grid">
+            <div class="col-12">
+              <div class="field">
+                <label for="practiceHours" class="font-bold">Practice Hours *</label>
+                <p-inputNumber id="practiceHours" formControlName="practiceHours" [min]="0" class="w-full"></p-inputNumber>
+                <small *ngIf="candidateForm.get('practiceHours')?.invalid && candidateForm.get('practiceHours')?.touched" class="p-error">
+                  Practice hours are required
+                </small>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- English Proficiency Section -->
+        <p-card header="English Proficiency" styleClass="p-mb-3 p-mt-3">
+          <div formGroupName="englishProficiency">
+            <div class="grid">
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="englishProficiencyType" class="font-bold">Proficiency Type *</label>
+                  <p-dropdown id="englishProficiencyType" [options]="englishProficiencyTypes" formControlName="type" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Type" class="w-full"></p-dropdown>
+                  <small *ngIf="candidateForm.get('englishProficiency.type')?.invalid && candidateForm.get('englishProficiency.type')?.touched" class="p-error">
+                    Proficiency type is required
+                  </small>
+                </div>
+              </div>
+  
+              <div class="col-12 md:col-6" *ngIf="candidateForm.get('englishProficiency.type')?.value !== 'Recent Practice'">
+                <div class="field">
+                  <label for="englishProficiencyScore" class="font-bold">Score *</label>
+                  <input id="englishProficiencyScore" type="text" pInputText formControlName="score" class="w-full">
+                  <small *ngIf="candidateForm.get('englishProficiency.score')?.invalid && candidateForm.get('englishProficiency.score')?.touched" class="p-error">
+                    Score is required
+                  </small>
+                </div>
+              </div>
+  
+              <div class="col-12 md:col-6" *ngIf="candidateForm.get('englishProficiency.type')?.value === 'Recent Practice'">
+                <div class="field">
+                  <label for="recentPracticePercentage" class="font-bold">Percentage of Care in English *</label>
+                  <p-inputNumber id="recentPracticePercentage" formControlName="recentPracticePercentage" [min]="0" [max]="100" suffix="%" class="w-full"></p-inputNumber>
+                  <small *ngIf="candidateForm.get('englishProficiency.recentPracticePercentage')?.invalid && candidateForm.get('englishProficiency.recentPracticePercentage')?.touched" class="p-error">
+                    Percentage is required
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- Postgraduate Training Section -->
+        <p-card header="Postgraduate Training" styleClass="p-mb-3 p-mt-3">
+          <div formGroupName="postGradTraining">
+            <div class="grid">
+              <div class="col-12">
+                <div class="field-checkbox">
+                  <p-checkbox formControlName="completed" [binary]="true" inputId="completed"></p-checkbox>
+                  <label for="completed">Completed Postgraduate Training</label>
+                </div>
+              </div>
+  
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="months" class="font-bold">Postgraduate Training Months</label>
+                  <p-inputNumber id="months" formControlName="months" [min]="0" class="w-full"></p-inputNumber>
+                </div>
+              </div>
+  
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="independentPracticeMonths" class="font-bold">Independent Practice Months</label>
+                  <p-inputNumber id="independentPracticeMonths" formControlName="independentPracticeMonths" [min]="0" class="w-full"></p-inputNumber>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- Rotations & Impairment Section -->
+        <p-card header="Rotations & Impairment" styleClass="p-mb-3 p-mt-3">
+          <div class="grid">
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="rotationsCompleted" class="font-bold">Rotations Completed *</label>
+                <p-inputNumber id="rotationsCompleted" formControlName="rotationsCompleted" [min]="0" class="w-full"></p-inputNumber>
+                <small *ngIf="candidateForm.get('rotationsCompleted')?.invalid && candidateForm.get('rotationsCompleted')?.touched" class="p-error">
+                  Number of rotations is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="hasImpairmentToPractice" class="font-bold d-block">Impairment to Practice</label>
+                <div class="field-checkbox mt-3">
+                  <p-checkbox formControlName="hasImpairmentToPractice" [binary]="true" inputId="hasImpairmentToPractice"></p-checkbox>
+                  <label for="hasImpairmentToPractice">Has impairment to practice</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+  
+        <!-- Form Buttons -->
+        <div class="flex justify-content-end mt-4">
+          <button pButton type="button" label="Reset" icon="pi pi-refresh" (click)="resetForm()" class="p-button-outlined p-button-secondary mr-2"></button>
+          <button pButton type="submit" label="Evaluate" icon="pi pi-check" [loading]="submitting"></button>
+        </div>
+      </form>
+  
+      <!-- Results Section -->
+      <div *ngIf="evaluationResult" class="mt-4">
+        <app-flag-table [evaluationResult]="evaluationResult"></app-flag-table>
+      </div>
+    </p-card>
+</div>

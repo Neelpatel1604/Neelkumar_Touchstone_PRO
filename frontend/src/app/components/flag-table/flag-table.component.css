@@ -1,0 +1,41 @@
+.flag-results {
+    margin-top: 2rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    color: #495057;
+  }
+  
+  :host ::ng-deep .red-flag-card .p-card-header {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+  }
+  
+  :host ::ng-deep .green-flag-card .p-card-header {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+  }
+  
+  :host ::ng-deep .p-datatable .p-datatable-header {
+    background-color: #f8f9fa;
+  }
+  
+  :host ::ng-deep .p-message {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  :host ::ng-deep .p-message-wrapper {
+    font-weight: 600;
+  }
