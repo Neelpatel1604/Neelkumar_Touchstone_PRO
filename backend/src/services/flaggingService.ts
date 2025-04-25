@@ -4,42 +4,57 @@ import { EvaluationResult, Flag, FlagType } from '../models/Flag';
 export class FlaggingService {
   
   evaluateCandidate(candidate: Candidate): EvaluationResult {
-    const flags: Flag[] = [];
-    
-    // Personal Information Validation
-    this.validateRequiredFields(candidate, flags);
-    
-    // Legal Status
-    this.evaluateLegalStatus(candidate, flags);
-    
-    // Driving License
-    this.evaluateDrivingLicense(candidate, flags);
-    
-    // Practice Hours
-    this.evaluatePracticeHours(candidate, flags);
-    
-    // TDM Results
-    this.evaluateTDM(candidate, flags);
-    
-    // English Proficiency
-    this.evaluateEnglishProficiency(candidate, flags);
-    
-    // Postgrad Training
-    this.evaluatePostgradTraining(candidate, flags);
-    
-    // Rotations
-    this.evaluateRotations(candidate, flags);
-    
-    // Impairment to Practice
-    this.evaluateImpairment(candidate, flags);
-    
-    // Check if candidate is eligible (no red flags)
-    const hasRedFlags = flags.some(flag => flag.status === 'Red');
-    
-    return {
-      isEligible: !hasRedFlags,
-      flags,
-    };
+    try {
+      console.log('Processing candidate:', JSON.stringify(candidate, null, 2));
+      const flags: Flag[] = [];
+      
+      // Personal Information Validation
+      this.validateRequiredFields(candidate, flags);
+      
+      // Legal Status
+      this.evaluateLegalStatus(candidate, flags);
+      
+      // Driving License
+      this.evaluateDrivingLicense(candidate, flags);
+      
+      // Practice Hours
+      this.evaluatePracticeHours(candidate, flags);
+      
+      // TDM Results
+      this.evaluateTDM(candidate, flags);
+      
+      // English Proficiency
+      this.evaluateEnglishProficiency(candidate, flags);
+      
+      // Postgrad Training
+      this.evaluatePostgradTraining(candidate, flags);
+      
+      // Rotations
+      this.evaluateRotations(candidate, flags);
+      
+      // Impairment to Practice
+      this.evaluateImpairment(candidate, flags);
+      
+      // Check if candidate is eligible (no red flags)
+      const hasRedFlags = flags.some(flag => flag.status === 'Red');
+      
+      return {
+        isEligible: !hasRedFlags,
+        flags,
+      };
+    } catch (error) {
+      console.error('Error in flagging service:', error);
+      // Return a basic result with an error flag
+      return {
+        isEligible: false,
+        flags: [{
+          category: 'System Error',
+          field: 'evaluation',
+          status: 'Red',
+          message: 'Error processing candidate data: ' + (error as Error).message
+        }]
+      };
+    }
   }
   
   private validateRequiredFields(candidate: Candidate, flags: Flag[]): void {
@@ -183,13 +198,15 @@ export class FlaggingService {
     
     switch (englishProficiency.type) {
       case 'IELTS':
-        isEligible = (englishProficiency.score as number) >= 7;
+        // Notice that the value is coming as a string "8" not number 8
+        // Convert to number for comparison
+        isEligible = parseFloat(englishProficiency.score as string) >= 7;
         break;
       case 'OET':
         isEligible = (englishProficiency.score as string) >= 'B';
         break;
       case 'CELPIP':
-        isEligible = (englishProficiency.score as number) >= 9;
+        isEligible = parseFloat(englishProficiency.score as string) >= 9;
         break;
       case 'Recent Practice':
         isEligible = (englishProficiency.recentPracticePercentage || 0) >= 50;

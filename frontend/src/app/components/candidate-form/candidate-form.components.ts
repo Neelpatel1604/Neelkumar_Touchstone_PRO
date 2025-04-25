@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,8 +9,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { MessageService, MenuItem } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
+import { StepsModule } from 'primeng/steps';
+import { PanelModule } from 'primeng/panel';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { Candidate } from '../../models/candidate.model';
 import { CandidateService } from '../../services/candidate.service';
@@ -33,11 +36,15 @@ import { EvaluationResult } from '../../models/flag.model';
     CardModule,
     ToastModule,
     CheckboxModule,
-    FlagTableComponent
+    FlagTableComponent,
+    StepsModule,
+    PanelModule,
+    ProgressSpinnerModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, CandidateService],
   templateUrl: './candidate-form.components.html',
-  styleUrl: './candidate-form.components.css'
+  styleUrl: './candidate-form.components.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CandidateFormComponent implements OnInit {
   candidateForm!: FormGroup;
@@ -59,16 +66,28 @@ export class CandidateFormComponent implements OnInit {
   ];
   
   evaluationResult: EvaluationResult | null = null;
+  candidateId: string | null = null;
   submitting = false;
+  items: MenuItem[] = [];
+  activeIndex: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private candidateService: CandidateService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.items = [
+      { label: 'Personal Information', command: (event) => this.activeIndex = 0 },
+      { label: 'Medical Education', command: (event) => this.activeIndex = 1 },
+      { label: 'Examinations', command: (event) => this.activeIndex = 2 },
+      { label: 'Practice & License', command: (event) => this.activeIndex = 3 },
+      { label: 'Proficiency & Training', command: (event) => this.activeIndex = 4 },
+      { label: 'Final Details', command: (event) => this.activeIndex = 5 }
+    ];
   }
 
   initForm(): void {
@@ -141,7 +160,11 @@ export class CandidateFormComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onSubmit(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    
     if (this.candidateForm.invalid) {
       this.markFormGroupTouched(this.candidateForm);
       this.messageService.add({
@@ -153,25 +176,60 @@ export class CandidateFormComponent implements OnInit {
     }
 
     this.submitting = true;
+    this.cdr.markForCheck();
+    
     const candidate: Candidate = this.candidateForm.value;
+
+    // Show loading message
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Processing',
+      detail: 'Evaluating candidate...'
+    });
+
+    console.log('Form data being submitted:', candidate);
 
     this.candidateService.evaluateCandidate(candidate).subscribe({
       next: (response) => {
+        console.log('Response received:', response);
         this.submitting = false;
-        this.evaluationResult = response.data;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Candidate has been evaluated successfully.'
-        });
+        
+        if (response && response.success === true && response.data) {
+          // Create a clean copy without circular references
+          const cleanResult = JSON.parse(JSON.stringify(response.data));
+          this.evaluationResult = cleanResult;
+          this.candidateId = cleanResult.candidateId || null;
+          
+          console.log('Setting evaluation result:', this.evaluationResult);
+          console.log('Setting candidate ID:', this.candidateId);
+          
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Candidate has been evaluated successfully.'
+          });
+          
+          // Force change detection to update the UI with the new evaluationResult
+          this.cdr.markForCheck();
+        } else {
+          console.error('Response not successful', response);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Evaluation Failed',
+            detail: response?.message || 'Server returned an unsuccessful response.'
+          });
+          this.cdr.markForCheck();
+        }
       },
       error: (error) => {
+        console.error('Evaluation error details:', error);
         this.submitting = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: error.message || 'Failed to evaluate candidate.'
+          detail: 'Failed to evaluate candidate: ' + (error.message || 'Unknown error')
         });
+        this.cdr.markForCheck();
       }
     });
   }
@@ -190,6 +248,24 @@ export class CandidateFormComponent implements OnInit {
   resetForm(): void {
     this.candidateForm.reset();
     this.evaluationResult = null;
+    this.candidateId = null;
     this.initForm();
+    this.cdr.markForCheck();
+  }
+
+  nextStep() {
+    if (this.activeIndex < 5) {
+      this.activeIndex++;
+      window.scrollTo(0, 0);
+      this.cdr.markForCheck();
+    }
+  }
+
+  previousStep() {
+    if (this.activeIndex > 0) {
+      this.activeIndex--;
+      window.scrollTo(0, 0);
+      this.cdr.markForCheck();
+    }
   }
 }

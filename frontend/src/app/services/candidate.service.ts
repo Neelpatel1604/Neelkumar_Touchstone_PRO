@@ -1,18 +1,92 @@
+// frontend/src/app/services/candidate.service.ts (updated)
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, timeout, catchError, throwError } from 'rxjs';
 import { Candidate } from '../models/candidate.model';
-import { ApiResponse } from '../models/flag.model';
+import { ApiResponse, EvaluationResult, Flag } from '../models/flag.model';
+
+interface StoredCandidate {
+  id: string;
+  candidate: Candidate;
+  evaluation: EvaluationResult;
+  timestamp: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class CandidateService {
-  private apiUrl = 'http://localhost:5000/evaluate';
+  private apiUrl = 'http://localhost:5000/api/candidates';
 
   constructor(private http: HttpClient) { }
-
+  
   evaluateCandidate(candidate: Candidate): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.apiUrl, candidate);
+    console.log('Sending candidate data:', candidate);
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    
+    // Create a copy to avoid modifying the original
+    const preparedCandidate = JSON.parse(JSON.stringify(candidate));
+    
+    // Ensure englishProficiency score is correctly handled (keep as string)
+    if (preparedCandidate.englishProficiency && 
+        preparedCandidate.englishProficiency.score !== null) {
+      preparedCandidate.englishProficiency.score = 
+        preparedCandidate.englishProficiency.score.toString();
+    }
+    
+    console.log('Prepared data:', preparedCandidate);
+    
+    return this.http.post<ApiResponse>(`${this.apiUrl}/evaluate`, preparedCandidate, { headers })
+      .pipe(
+        timeout(30000),
+        catchError(error => {
+          console.error('API Error:', error);
+          return throwError(() => error);
+        })
+      );
   }
+  
+  updateFlagStatus(candidateId: string, flagId: string, acknowledged: boolean, overridden: boolean): Observable<ApiResponse> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const url = `${this.apiUrl}/${candidateId}/flags/${flagId}`;
+    
+    return this.http.patch<ApiResponse>(url, { acknowledged, overridden }, { headers })
+      .pipe(
+        catchError(error => {
+          console.error('API Error updating flag:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+  
+  getAllCandidates(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}`)
+      .pipe(
+        catchError(error => {
+          console.error('API Error getting candidates:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+  
+  getCandidateById(candidateId: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/${candidateId}`)
+      .pipe(
+        catchError(error => {
+          console.error('API Error getting candidate:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+  getAllStoredCandidates(): Observable<{success: boolean, data?: StoredCandidate[], message?: string}> {
+  return this.http.get<{success: boolean, data?: StoredCandidate[], message?: string}>(`${this.apiUrl}/stored`)
+    .pipe(
+      catchError(error => {
+        console.error('API Error getting stored candidates:', error);
+        return throwError(() => error);
+      })
+    );
+}
 }

@@ -1,0 +1,81 @@
+<!-- frontend/src/app/components/candidate-list/candidate-list.component.html -->
+<div class="candidate-list-container">
+    <p-toast></p-toast>
+    
+    <p-card header="Evaluated Candidates" styleClass="mb-4">
+      <div class="card-header">
+        <h2>Previously Evaluated Candidates</h2>
+        <button pButton type="button" icon="pi pi-refresh" 
+                label="Refresh" (click)="refreshList()" 
+                [disabled]="loading" class="p-button-outlined">
+        </button>
+      </div>
+      
+      <p-table [value]="candidates" [loading]="loading" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date Evaluated</th>
+            <th>Status</th>
+            <th>Red Flags</th>
+            <th>Green Flags</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-candidate>
+          <tr>
+            <td>{{ candidate.candidate.firstName }} {{ candidate.candidate.lastName }}</td>
+            <td>{{ candidate.candidate.email }}</td>
+            <td>{{ formatDate(candidate.timestamp) }}</td>
+            <td>
+              <p-tag [severity]="getEligibilitySeverity(candidate.evaluation)" 
+                     [value]="getEligibilityStatus(candidate.evaluation)">
+              </p-tag>
+            </td>
+            <td>{{ countFlags(candidate.evaluation, 'Red') }}</td>
+            <td>{{ countFlags(candidate.evaluation, 'Green') }}</td>
+            <td>
+              <button pButton type="button" icon="pi pi-eye" 
+                      (click)="viewCandidate(candidate)" 
+                      class="p-button-rounded p-button-info p-button-sm">
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="text-center">
+              No candidates have been evaluated yet.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+    
+    <p-dialog header="Candidate Details" 
+              [(visible)]="showDialog" 
+              [modal]="true" 
+              [style]="{width: '90%'}" 
+              [draggable]="false" 
+              [resizable]="false">
+      <div *ngIf="selectedCandidate" class="candidate-details">
+        <div class="candidate-info">
+          <h3>{{ selectedCandidate.candidate.firstName }} {{ selectedCandidate.candidate.lastName }}</h3>
+          <p><strong>Email:</strong> {{ selectedCandidate.candidate.email }}</p>
+          <p><strong>Date of Birth:</strong> {{ selectedCandidate.candidate.dateOfBirth }}</p>
+          <p><strong>Legal Status:</strong> {{ selectedCandidate.candidate.legalStatus }}</p>
+          <p><strong>Medical School:</strong> {{ selectedCandidate.candidate.medicalSchool }}</p>
+          <p><strong>Degree:</strong> {{ selectedCandidate.candidate.degree }}</p>
+          <p><strong>Date Evaluated:</strong> {{ formatDate(selectedCandidate.timestamp) }}</p>
+        </div>
+        
+        <div class="flag-container">
+          <app-flag-table 
+            [evaluationResult]="selectedCandidate.evaluation" 
+            [candidateId]="selectedCandidate.id">
+          </app-flag-table>
+        </div>
+      </div>
+    </p-dialog>
+  </div>
