@@ -1,18 +1,18 @@
 export interface Candidate {
-    // Personal Information
+    // Personal details
     firstName: string;
     lastName: string;
     email: string;
     dateOfBirth: string;
     legalStatus: 'Permanent Resident' | 'Canadian Citizen' | 'Other';
     
-    // Medical Education
+    // Education background
     medicalSchool: string;
     degree: string;
     graduationYear: number;
     languageOfEducation: string;
     
-    // Examinations
+    // Exam history
     nacDate?: string;
     mccqe1Date?: string;
     mccqe2Date?: string;

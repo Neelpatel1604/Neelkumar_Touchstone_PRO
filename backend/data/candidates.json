@@ -7673,5 +7673,600 @@
       ]
     },
     "timestamp": "2025-04-25T16:02:40.953Z"
+  },
+  {
+    "id": "9e774a0b-3a4b-45e5-a14c-1494a7996642",
+    "candidate": {
+      "firstName": "Neelkumar",
+      "lastName": "Patel",
+      "email": "pate6219@sheridancollege.ca",
+      "dateOfBirth": "2025-04-09T04:00:00.000Z",
+      "legalStatus": "Permanent Resident",
+      "medicalSchool": "Sheridan college",
+      "degree": "MD",
+      "graduationYear": 2017,
+      "languageOfEducation": "english",
+      "nacDate": "2025-04-01T04:00:00.000Z",
+      "mccqe1Date": "2025-04-03T04:00:00.000Z",
+      "mccqe2Date": "2025-04-04T04:00:00.000Z",
+      "writtenTDM": "Passed",
+      "hasCanadianDrivingLicense": true,
+      "practiceHours": 16,
+      "englishProficiency": {
+        "type": "IELTS",
+        "score": "23",
+        "recentPracticePercentage": null
+      },
+      "postGradTraining": {
+        "completed": true,
+        "months": 232,
+        "independentPracticeMonths": 323
+      },
+      "rotationsCompleted": 22,
+      "hasImpairmentToPractice": true
+    },
+    "evaluation": {
+      "isEligible": false,
+      "flags": [
+        {
+          "id": "cwbtwww",
+          "category": "Legal Status",
+          "field": "legalStatus",
+          "status": "Green",
+          "message": "Candidate meets legal status requirement",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "kiucasd",
+          "category": "Driving License",
+          "field": "hasCanadianDrivingLicense",
+          "status": "Green",
+          "message": "Candidate has a valid Canadian driving license",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "5zq3i8y",
+          "category": "Practice Hours",
+          "field": "practiceHours",
+          "status": "Red",
+          "message": "Candidate must have at least 720 hours of in-person practice",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "e1cqgj7",
+          "category": "TDM Results",
+          "field": "writtenTDM",
+          "status": "Green",
+          "message": "Candidate has passed the Written TDM test",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "ed2c8ud",
+          "category": "English Proficiency",
+          "field": "englishProficiency",
+          "status": "Green",
+          "message": "Candidate meets English proficiency requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "5jedalj",
+          "category": "Postgrad Training",
+          "field": "postGradTraining",
+          "status": "Green",
+          "message": "Candidate meets postgrad training requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "jh7p55t",
+          "category": "Postgrad Training",
+          "field": "twoYearPostgradCompleted",
+          "status": "Green",
+          "message": "Candidate has completed 2 years of postgrad training",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "ltbbrci",
+          "category": "Rotations",
+          "field": "rotationsCompleted",
+          "status": "Green",
+          "message": "Candidate has completed the required 7 rotations",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "lh80qyi",
+          "category": "Impairment to Practice",
+          "field": "hasImpairmentToPractice",
+          "status": "Red",
+          "message": "Candidate has impairment to practice",
+          "acknowledged": false,
+          "overridden": false
+        }
+      ]
+    },
+    "timestamp": "2025-04-25T16:10:32.200Z"
+  },
+  {
+    "id": "fb1c077a-e2d0-4495-84d4-09ec73603310",
+    "candidate": {
+      "firstName": "Neelkumar",
+      "lastName": "Patel",
+      "email": "pate6219@sheridancollege.ca",
+      "dateOfBirth": "2025-04-01T04:00:00.000Z",
+      "legalStatus": "Permanent Resident",
+      "medicalSchool": "Sheridan college",
+      "degree": "MD",
+      "graduationYear": 2017,
+      "languageOfEducation": "english",
+      "nacDate": "2025-04-02T04:00:00.000Z",
+      "mccqe1Date": "2025-04-02T04:00:00.000Z",
+      "mccqe2Date": "2025-04-04T04:00:00.000Z",
+      "writtenTDM": "Passed",
+      "hasCanadianDrivingLicense": true,
+      "practiceHours": 9262,
+      "englishProficiency": {
+        "type": "IELTS",
+        "score": "8",
+        "recentPracticePercentage": null
+      },
+      "postGradTraining": {
+        "completed": true,
+        "months": 32,
+        "independentPracticeMonths": 32
+      },
+      "rotationsCompleted": 223,
+      "hasImpairmentToPractice": true
+    },
+    "evaluation": {
+      "isEligible": false,
+      "flags": [
+        {
+          "id": "vggagjc",
+          "category": "Legal Status",
+          "field": "legalStatus",
+          "status": "Green",
+          "message": "Candidate meets legal status requirement",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "wv3rcnm",
+          "category": "Driving License",
+          "field": "hasCanadianDrivingLicense",
+          "status": "Green",
+          "message": "Candidate has a valid Canadian driving license",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "pi99cfh",
+          "category": "Practice Hours",
+          "field": "practiceHours",
+          "status": "Green",
+          "message": "Candidate has sufficient practice hours",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "n2zyw0u",
+          "category": "TDM Results",
+          "field": "writtenTDM",
+          "status": "Green",
+          "message": "Candidate has passed the Written TDM test",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "brqv95n",
+          "category": "English Proficiency",
+          "field": "englishProficiency",
+          "status": "Green",
+          "message": "Candidate meets English proficiency requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "aisi1dt",
+          "category": "Postgrad Training",
+          "field": "postGradTraining",
+          "status": "Green",
+          "message": "Candidate meets postgrad training requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "qai2nn4",
+          "category": "Postgrad Training",
+          "field": "twoYearPostgradCompleted",
+          "status": "Green",
+          "message": "Candidate has completed 2 years of postgrad training",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "s1y0wpq",
+          "category": "Rotations",
+          "field": "rotationsCompleted",
+          "status": "Green",
+          "message": "Candidate has completed the required 7 rotations",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "r9syvn5",
+          "category": "Impairment to Practice",
+          "field": "hasImpairmentToPractice",
+          "status": "Red",
+          "message": "Candidate has impairment to practice",
+          "acknowledged": false,
+          "overridden": false
+        }
+      ]
+    },
+    "timestamp": "2025-04-25T16:25:19.077Z"
+  },
+  {
+    "id": "6daec138-063e-4655-ba4e-680c94eb2c3d",
+    "candidate": {
+      "firstName": "Neelkumar",
+      "lastName": "Patel",
+      "email": "pate6219@sheridancollege.ca",
+      "dateOfBirth": "2025-04-01T04:00:00.000Z",
+      "legalStatus": "Permanent Resident",
+      "medicalSchool": "Sheridan college",
+      "degree": "MD",
+      "graduationYear": 2017,
+      "languageOfEducation": "english",
+      "nacDate": "2025-04-02T04:00:00.000Z",
+      "mccqe1Date": "2025-04-02T04:00:00.000Z",
+      "mccqe2Date": "2025-04-04T04:00:00.000Z",
+      "writtenTDM": "Passed",
+      "hasCanadianDrivingLicense": true,
+      "practiceHours": 9262,
+      "englishProficiency": {
+        "type": "IELTS",
+        "score": "8",
+        "recentPracticePercentage": null
+      },
+      "postGradTraining": {
+        "completed": true,
+        "months": 32,
+        "independentPracticeMonths": 32
+      },
+      "rotationsCompleted": 223,
+      "hasImpairmentToPractice": false
+    },
+    "evaluation": {
+      "isEligible": true,
+      "flags": [
+        {
+          "id": "y996xzq",
+          "category": "Legal Status",
+          "field": "legalStatus",
+          "status": "Green",
+          "message": "Candidate meets legal status requirement",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "7befzf7",
+          "category": "Driving License",
+          "field": "hasCanadianDrivingLicense",
+          "status": "Green",
+          "message": "Candidate has a valid Canadian driving license",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "ksagnvy",
+          "category": "Practice Hours",
+          "field": "practiceHours",
+          "status": "Green",
+          "message": "Candidate has sufficient practice hours",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "v22vtpz",
+          "category": "TDM Results",
+          "field": "writtenTDM",
+          "status": "Green",
+          "message": "Candidate has passed the Written TDM test",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "jo836p1",
+          "category": "English Proficiency",
+          "field": "englishProficiency",
+          "status": "Green",
+          "message": "Candidate meets English proficiency requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "pyqg45j",
+          "category": "Postgrad Training",
+          "field": "postGradTraining",
+          "status": "Green",
+          "message": "Candidate meets postgrad training requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "173385h",
+          "category": "Postgrad Training",
+          "field": "twoYearPostgradCompleted",
+          "status": "Green",
+          "message": "Candidate has completed 2 years of postgrad training",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "b9exs53",
+          "category": "Rotations",
+          "field": "rotationsCompleted",
+          "status": "Green",
+          "message": "Candidate has completed the required 7 rotations",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "wdywvos",
+          "category": "Impairment to Practice",
+          "field": "hasImpairmentToPractice",
+          "status": "Green",
+          "message": "Candidate has no impairment to practice",
+          "acknowledged": false,
+          "overridden": false
+        }
+      ]
+    },
+    "timestamp": "2025-04-25T16:25:25.308Z"
+  },
+  {
+    "id": "27d81f7b-f905-4690-8d44-aa4b3fdce3c4",
+    "candidate": {
+      "firstName": "Neelkumar",
+      "lastName": "Patel",
+      "email": "pate6219@sheridancollege.ca",
+      "dateOfBirth": "2025-04-01T04:00:00.000Z",
+      "legalStatus": "Permanent Resident",
+      "medicalSchool": "Sheridan college",
+      "degree": "MD",
+      "graduationYear": 2017,
+      "languageOfEducation": "english",
+      "nacDate": "2025-04-02T04:00:00.000Z",
+      "mccqe1Date": "2025-04-01T04:00:00.000Z",
+      "mccqe2Date": "2025-04-03T04:00:00.000Z",
+      "writtenTDM": "Passed",
+      "hasCanadianDrivingLicense": true,
+      "practiceHours": 43,
+      "englishProficiency": {
+        "type": "IELTS",
+        "score": "34",
+        "recentPracticePercentage": null
+      },
+      "postGradTraining": {
+        "completed": false,
+        "months": 34,
+        "independentPracticeMonths": 34
+      },
+      "rotationsCompleted": 43,
+      "hasImpairmentToPractice": true
+    },
+    "evaluation": {
+      "isEligible": false,
+      "flags": [
+        {
+          "id": "f72tq5i",
+          "category": "Legal Status",
+          "field": "legalStatus",
+          "status": "Green",
+          "message": "Candidate meets legal status requirement",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "gnqn0b2",
+          "category": "Driving License",
+          "field": "hasCanadianDrivingLicense",
+          "status": "Green",
+          "message": "Candidate has a valid Canadian driving license",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "f0n6rgo",
+          "category": "Practice Hours",
+          "field": "practiceHours",
+          "status": "Red",
+          "message": "Candidate must have at least 720 hours of in-person practice",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "38ylz3h",
+          "category": "TDM Results",
+          "field": "writtenTDM",
+          "status": "Green",
+          "message": "Candidate has passed the Written TDM test",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "h1an9x9",
+          "category": "English Proficiency",
+          "field": "englishProficiency",
+          "status": "Green",
+          "message": "Candidate meets English proficiency requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "uurcrr2",
+          "category": "Postgrad Training",
+          "field": "postGradTraining",
+          "status": "Green",
+          "message": "Candidate meets postgrad training requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "gjhu7yz",
+          "category": "Postgrad Training",
+          "field": "twoYearPostgradCompleted",
+          "status": "Green",
+          "message": "Candidate has completed 2 years of postgrad training",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "he6jvhq",
+          "category": "Rotations",
+          "field": "rotationsCompleted",
+          "status": "Green",
+          "message": "Candidate has completed the required 7 rotations",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "9p8jjr0",
+          "category": "Impairment to Practice",
+          "field": "hasImpairmentToPractice",
+          "status": "Red",
+          "message": "Candidate has impairment to practice",
+          "acknowledged": false,
+          "overridden": false
+        }
+      ]
+    },
+    "timestamp": "2025-04-25T16:27:46.253Z"
+  },
+  {
+    "id": "cebff0ec-0602-434e-a3b0-56b4c2525368",
+    "candidate": {
+      "firstName": "Neelkumar",
+      "lastName": "Patel",
+      "email": "pate6219@sheridancollege.ca",
+      "dateOfBirth": "2025-04-01T04:00:00.000Z",
+      "legalStatus": "Permanent Resident",
+      "medicalSchool": "Sheridan college",
+      "degree": "MD",
+      "graduationYear": 2017,
+      "languageOfEducation": "english",
+      "nacDate": "2025-04-02T04:00:00.000Z",
+      "mccqe1Date": "2025-04-09T04:00:00.000Z",
+      "mccqe2Date": "2025-04-04T04:00:00.000Z",
+      "writtenTDM": "Passed",
+      "hasCanadianDrivingLicense": true,
+      "practiceHours": 212,
+      "englishProficiency": {
+        "type": "IELTS",
+        "score": "12",
+        "recentPracticePercentage": null
+      },
+      "postGradTraining": {
+        "completed": false,
+        "months": 12,
+        "independentPracticeMonths": 12
+      },
+      "rotationsCompleted": 21,
+      "hasImpairmentToPractice": false
+    },
+    "evaluation": {
+      "isEligible": false,
+      "flags": [
+        {
+          "id": "9bc0vle",
+          "category": "Legal Status",
+          "field": "legalStatus",
+          "status": "Green",
+          "message": "Candidate meets legal status requirement",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "83dsjim",
+          "category": "Driving License",
+          "field": "hasCanadianDrivingLicense",
+          "status": "Green",
+          "message": "Candidate has a valid Canadian driving license",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "8g58fmc",
+          "category": "Practice Hours",
+          "field": "practiceHours",
+          "status": "Red",
+          "message": "Candidate must have at least 720 hours of in-person practice",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "z8c8kfu",
+          "category": "TDM Results",
+          "field": "writtenTDM",
+          "status": "Green",
+          "message": "Candidate has passed the Written TDM test",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "yiiqo1z",
+          "category": "English Proficiency",
+          "field": "englishProficiency",
+          "status": "Green",
+          "message": "Candidate meets English proficiency requirements",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "oeqx0mi",
+          "category": "Postgrad Training",
+          "field": "postGradTraining",
+          "status": "Red",
+          "message": "Candidate must have completed either 24 months PG + 24 months independent practice OR 12 months PG + 36 months independent practice",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "8sraw7m",
+          "category": "Postgrad Training",
+          "field": "twoYearPostgradCompleted",
+          "status": "Red",
+          "message": "Candidate must complete 2 years of postgrad training",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "im4syyv",
+          "category": "Rotations",
+          "field": "rotationsCompleted",
+          "status": "Green",
+          "message": "Candidate has completed the required 7 rotations",
+          "acknowledged": false,
+          "overridden": false
+        },
+        {
+          "id": "s1fp7wn",
+          "category": "Impairment to Practice",
+          "field": "hasImpairmentToPractice",
+          "status": "Green",
+          "message": "Candidate has no impairment to practice",
+          "acknowledged": false,
+          "overridden": false
+        }
+      ]
+    },
+    "timestamp": "2025-04-25T16:34:11.914Z"
   }
 ]

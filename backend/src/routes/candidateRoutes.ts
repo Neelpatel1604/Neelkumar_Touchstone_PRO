@@ -6,19 +6,19 @@ import { validateCandidateData } from '../middleware/validateRequest';
 const router = express.Router();
 const candidateController = new CandidateController();
 
-// POST endpoint to evaluate a candidate with validation
+// Candidate evaluation endpoint
 router.post('/evaluate', validateCandidateData, candidateController.evaluateCandidate);
 
-// GET all candidates
+// Retrieve all candidates
 router.get('/', candidateController.getAllCandidates);
 
-// GET stored candidates - must come before /:candidateId to avoid pattern matching issues
+// Get stored candidates list (route order matters to prevent param collision)
 router.get('/stored', candidateController.getStoredCandidates);
 
-// GET candidate by ID (specific ID routes should come after more specific routes)
+// Fetch candidate details by ID
 router.get('/:candidateId', candidateController.getCandidateById);
 
-// PATCH to update flag status
+// Update candidate flag
 router.patch('/:candidateId/flags/:flagId', candidateController.updateFlag);
 
 export default router;

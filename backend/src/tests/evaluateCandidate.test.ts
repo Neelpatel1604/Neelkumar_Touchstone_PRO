@@ -7,12 +7,12 @@ const API_URL = 'http://localhost:5000/api/candidates';
 
 // Valid candidate data - this should match all criteria for eligibility
 const validCandidate = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
+  firstName: 'Neel',
+  lastName: 'Patel',
+  email: 'neel.patel@outlook.com',
   dateOfBirth: '1990-01-01',
   legalStatus: 'Canadian Citizen',
-  medicalSchool: 'University of Toronto',
+  medicalSchool: 'Sheridan College',
   degree: 'MD',
   graduationYear: 2015,
   languageOfEducation: 'English',
@@ -34,9 +34,9 @@ const validCandidate = {
 
 // Invalid candidate data - fails multiple criteria
 const invalidCandidate = {
-  firstName: 'Jane',
-  lastName: 'Smith',
-  email: 'jane.smith@example.com',
+  firstName: 'Hello',
+  lastName: 'Wolrd',
+  email: 'hello.world@aquire.com',
   dateOfBirth: '1995-05-15',
   legalStatus: 'Other',
   medicalSchool: 'Foreign University',

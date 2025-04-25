@@ -5,38 +5,21 @@ export class FlaggingService {
   
   evaluateCandidate(candidate: Candidate): EvaluationResult {
     try {
-      // Log only essential data to avoid large console output
       console.log('Processing candidate:', candidate.firstName, candidate.lastName);
       const flags: Flag[] = [];
       
-      // Personal Information Validation
+      // Run validation checks
       this.validateRequiredFields(candidate, flags);
-      
-      // Legal Status
       this.evaluateLegalStatus(candidate, flags);
-      
-      // Driving License
       this.evaluateDrivingLicense(candidate, flags);
-      
-      // Practice Hours
       this.evaluatePracticeHours(candidate, flags);
-      
-      // TDM Results
       this.evaluateTDM(candidate, flags);
-      
-      // English Proficiency
       this.evaluateEnglishProficiency(candidate, flags);
-      
-      // Postgrad Training
       this.evaluatePostgradTraining(candidate, flags);
-      
-      // Rotations
       this.evaluateRotations(candidate, flags);
-      
-      // Impairment to Practice
       this.evaluateImpairment(candidate, flags);
       
-      // Check if candidate is eligible (no red flags)
+      // Determine eligibility - no red flags means eligible
       const hasRedFlags = flags.some(flag => flag.status === 'Red');
       
       return {

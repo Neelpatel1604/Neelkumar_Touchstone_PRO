@@ -15,13 +15,13 @@ export class CandidateController {
   
   evaluateCandidate = async (req: Request, res: Response): Promise<void> => {
     try {
-      // Log only essential information instead of the entire object
+      // Log identification info
       console.log('Receiving candidate data for:', 
         req.body.firstName, req.body.lastName, req.body.email);
       
       const candidateData: Candidate = req.body;
       
-      // Additional validation
+      // Basic validation
       if (!candidateData) {
         res.status(400).json({ 
           success: false, 
@@ -30,19 +30,13 @@ export class CandidateController {
         return;
       }
       
-      // Log that evaluation is starting
       console.log('Starting candidate evaluation');
       
-      // Evaluate the candidate
       const evaluationResult = this.flaggingService.evaluateCandidate(candidateData);
-      
-      // Store the candidate and evaluation asynchronously
       const candidateId = await this.storageService.storeCandidate(candidateData, evaluationResult);
       
-      // Log successful evaluation
-      console.log('Candidate evaluation completed successfully for ID:', candidateId);
+      console.log('Candidate evaluation completed for ID:', candidateId);
       
-      // Send a streamlined response
       res.status(200).json({
         success: true,
         data: {

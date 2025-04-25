@@ -4,7 +4,7 @@ import { Candidate } from '../models/Candidate';
 export const validateCandidateData = (req: Request, res: Response, next: NextFunction): void => {
   const candidateData = req.body as Partial<Candidate>;
   
-  // Check for required fields
+  // Core required fields
   const requiredFields: (keyof Candidate)[] = [
     'firstName', 
     'lastName', 
@@ -22,9 +22,8 @@ export const validateCandidateData = (req: Request, res: Response, next: NextFun
     'rotationsCompleted'
   ];
   
-  // Add better validation
   try {
-    // Check for missing fields
+    // Find missing fields
     const missingFields = requiredFields.filter(field => 
       candidateData[field] === undefined || candidateData[field] === null || 
       (typeof candidateData[field] === 'string' && candidateData[field] === '')
@@ -39,7 +38,7 @@ export const validateCandidateData = (req: Request, res: Response, next: NextFun
       return;
     }
 
-    // Validate nested objects
+    // Check object structures
     if (!candidateData.englishProficiency || typeof candidateData.englishProficiency !== 'object') {
       res.status(400).json({
         success: false,
@@ -56,7 +55,6 @@ export const validateCandidateData = (req: Request, res: Response, next: NextFun
       return;
     }
 
-    // If all validation passes, proceed
     next();
   } catch (error) {
     console.error('Validation error:', error);

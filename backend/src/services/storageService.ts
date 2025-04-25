@@ -17,16 +17,14 @@ export class StorageService {
   private candidates: StoredCandidate[] = [];
   private lastSave: number = 0;
   private saveQueue: Promise<void> = Promise.resolve();
-  private saveThrottleMs: number = 500; // Minimum time between saves
+  private saveThrottleMs: number = 500; // Throttle writes
 
   constructor() {
     this.dataFilePath = path.join(__dirname, '../../data/candidates.json');
-    // Initialize an empty array first
     this.candidates = [];
-    
-    // Start the async initialization
     this.initialize();
   }
+
   private async initialize(): Promise<void> {
     try {
       await this.ensureDataFileExists();
