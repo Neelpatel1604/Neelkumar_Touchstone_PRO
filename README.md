@@ -84,11 +84,5 @@ npm test
 
 Run the frontend tests:
 ```bash
-cd frontend
-ng test
+cd fronted
 ```
-```
-
-This README provides clear instructions on how to set up and run both the frontend and backend components of your application.
-
-With these additions, your application should meet all the requirements listed in your request. The application already had a strong foundation with both frontend and backend components, and these additions will help complete the implementation.
