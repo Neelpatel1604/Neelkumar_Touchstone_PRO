@@ -2,6 +2,13 @@
 
 This project consists of a medical candidate assessment system with flagging capabilities. It includes both frontend (Angular) and backend (Node.js) components.
 
+## Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Neelpatel1604/Neelkumar_Touchstone_PRO.git
+   ```
+
 ## Features
 
 - Candidate information form with validation
@@ -88,5 +95,5 @@ npm test
 
 Run the frontend tests:
 ```bash
-cd fronted
+cd frontend
 ```
