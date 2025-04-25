@@ -45,6 +45,7 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() candidateId: string | null = null;
   @Input() flags: Flag[] = [];
   @Input() submitting: boolean = false;
+  @Input() showOnlyOverride: boolean = false;
   
   redFlags: Flag[] = [];
   greenFlags: Flag[] = [];

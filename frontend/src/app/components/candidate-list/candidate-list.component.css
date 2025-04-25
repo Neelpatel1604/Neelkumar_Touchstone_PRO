@@ -42,3 +42,13 @@
   .mb-4 {
     margin-bottom: 1rem;
   }
+
+  /* Add this new style to make rows clickable */
+  .candidate-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .candidate-row:hover {
+    background-color: #e9ecef;
+  }

@@ -149,30 +149,13 @@ export class CandidateController {
   };
   getStoredCandidates = (req: Request, res: Response): void => {
     try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      
-      // Get total candidates count
+      // Get all candidates
       const allCandidates = this.storageService.getAllCandidates();
-      const total = allCandidates.length;
       
-      // Calculate pagination
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-      const paginatedCandidates = allCandidates.slice(startIndex, endIndex);
-      
-      // Return paginated data
+      // Return all candidates without pagination for simplicity
       res.status(200).json({
         success: true,
-        data: {
-          candidates: paginatedCandidates,
-          pagination: {
-            total,
-            page,
-            limit,
-            totalPages: Math.ceil(total / limit)
-          }
-        }
+        data: allCandidates
       });
     } catch (error) {
       console.error('Error retrieving stored candidates:', error);

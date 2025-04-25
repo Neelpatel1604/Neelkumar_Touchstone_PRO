@@ -52,7 +52,8 @@
             <td>{{flag.message}}</td>
             <td>
               <div class="d-flex">
-                <p-checkbox [(ngModel)]="flag.acknowledged" 
+                <p-checkbox *ngIf="!showOnlyOverride"
+                           [(ngModel)]="flag.acknowledged" 
                            [binary]="true"
                            (onChange)="updateFlag(flag)"
                            label="Acknowledge">

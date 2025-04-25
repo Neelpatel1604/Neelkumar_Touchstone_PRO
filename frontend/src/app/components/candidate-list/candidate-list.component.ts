@@ -1,4 +1,3 @@
-// frontend/src/app/components/candidate-list/candidate-list.component.ts
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -19,6 +18,11 @@ interface StoredCandidate {
   candidate: Candidate;
   evaluation: EvaluationResult;
   timestamp: string;
+}
+
+interface PaginatedResponse {
+  candidates: StoredCandidate[];
+  pagination?: any;
 }
 
 @Component({
@@ -60,15 +64,35 @@ export class CandidateListComponent implements OnInit {
     this.loading = true;
     this.candidateService.getAllStoredCandidates().subscribe({
       next: (response) => {
+        console.log('Received response:', response);
         if (response.success && response.data) {
-          this.candidates = response.data;
-          this.cdr.markForCheck();
+          // Ensure candidates is always an array
+          if (Array.isArray(response.data)) {
+            this.candidates = response.data;
+          } else if (response.data && typeof response.data === 'object' && 'candidates' in response.data) {
+            this.candidates = (response.data as PaginatedResponse).candidates;
+          } else {
+            console.error('Unexpected data format:', response.data);
+            this.candidates = [];
+          }
+          
+          console.log('Parsed candidates:', this.candidates);
+          
+          // Ensure each candidate has the correct structure
+          this.candidates = this.candidates.map(candidate => {
+            // Make sure evaluation.flags is always an array
+            if (!candidate.evaluation.flags || !Array.isArray(candidate.evaluation.flags)) {
+              candidate.evaluation.flags = [];
+            }
+            return candidate;
+          });
         } else {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Failed to load candidates: ' + (response.message || 'Unknown error')
           });
+          this.candidates = [];
         }
         this.loading = false;
         this.cdr.markForCheck();
@@ -81,6 +105,7 @@ export class CandidateListComponent implements OnInit {
           detail: 'Failed to load candidates: ' + (error.message || 'Unknown error')
         });
         this.loading = false;
+        this.candidates = [];
         this.cdr.markForCheck();
       }
     });
