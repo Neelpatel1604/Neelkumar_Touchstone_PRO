@@ -120,6 +120,7 @@ export class CandidateResultsComponent implements OnChanges {
   ngOnChanges() {
     if (this.evaluationResult && this.evaluationResult.flags) {
       this.flags = this.evaluationResult.flags;
+      console.log('Flags received with IDs:', this.flags.map(f => ({ id: f.id, status: f.status })));
       this.calculateFlagCounts();
     }
   }
@@ -139,6 +140,18 @@ export class CandidateResultsComponent implements OnChanges {
       return;
     }
     
+    // Check if flag.id exists before updating
+    if (!flag.id) {
+      console.error('Flag ID is missing', flag);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Cannot update flag: Flag ID is missing'
+      });
+      return;
+    }
+    
+    console.log('Updating flag:', flag);
     this.candidateService.updateFlagStatus(
       this.candidateId, 
       flag.id, 
@@ -169,6 +182,7 @@ export class CandidateResultsComponent implements OnChanges {
         }
       },
       error: (error) => {
+        console.error('Error updating flag:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

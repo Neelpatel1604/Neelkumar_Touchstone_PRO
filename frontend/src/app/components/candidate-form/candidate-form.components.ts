@@ -238,14 +238,25 @@ export class CandidateFormComponent implements OnInit {
           if (this.isEvaluationResult(response.data)) {
             // Then add the full evaluation result after a brief delay
             setTimeout(() => {
+              // Make sure all flags have IDs by generating them if needed
+              const flagsWithIds = response.data!.flags.map(flag => {
+                // If flag doesn't have an ID, generate one
+                if (!flag.id) {
+                  // Generate a random ID using a timestamp and random string
+                  const randomId = 'flag_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+                  return { ...flag, id: randomId };
+                }
+                return flag;
+              });
+
               // Create a clean copy and properly cast it to EvaluationResult
               this.evaluationResult = {
                 isEligible: response.data!.isEligible ?? false,
-                flags: response.data!.flags || [],
+                flags: flagsWithIds,
                 candidateId: response.data!.candidateId || ''
               };
               
-              console.log('Setting evaluation result:', this.evaluationResult);
+              console.log('Setting evaluation result with generated flag IDs:', this.evaluationResult);
               console.log('Setting candidate ID:', this.candidateId);
               
               this.messageService.add({

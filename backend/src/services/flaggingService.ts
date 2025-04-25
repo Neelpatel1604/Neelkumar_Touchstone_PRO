@@ -66,6 +66,7 @@ export class FlaggingService {
     requiredPersonalFields.forEach(field => {
       if (!candidate[field]) {
         flags.push({
+          id: Math.random().toString(36).substring(2, 9),
           category: 'Personal Information',
           field: field.toString(),
           status: 'Red',
@@ -80,6 +81,7 @@ export class FlaggingService {
     requiredMedicalFields.forEach(field => {
       if (!candidate[field]) {
         flags.push({
+          id: Math.random().toString(36).substring(2, 9),
           category: 'Medical Education',
           field: field.toString(),
           status: 'Red',
@@ -94,6 +96,7 @@ export class FlaggingService {
     examinationFields.forEach(field => {
       if (!candidate[field]) {
         flags.push({
+          id: Math.random().toString(36).substring(2, 9),
           category: 'Examinations',
           field: field.toString(),
           status: 'Red',
@@ -108,6 +111,7 @@ export class FlaggingService {
     
     if (legalStatus === 'Permanent Resident' || legalStatus === 'Canadian Citizen') {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Legal Status',
         field: 'legalStatus',
         status: 'Green',
@@ -115,6 +119,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Legal Status',
         field: 'legalStatus',
         status: 'Red',
@@ -128,6 +133,7 @@ export class FlaggingService {
     
     if (hasCanadianDrivingLicense) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Driving License',
         field: 'hasCanadianDrivingLicense',
         status: 'Green',
@@ -135,6 +141,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Driving License',
         field: 'hasCanadianDrivingLicense',
         status: 'Red',
@@ -148,6 +155,7 @@ export class FlaggingService {
     
     if (practiceHours >= 720) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Practice Hours',
         field: 'practiceHours',
         status: 'Green',
@@ -155,6 +163,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Practice Hours',
         field: 'practiceHours',
         status: 'Red',
@@ -168,6 +177,7 @@ export class FlaggingService {
     
     if (writtenTDM === 'Passed') {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'TDM Results',
         field: 'writtenTDM',
         status: 'Green',
@@ -175,6 +185,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'TDM Results',
         field: 'writtenTDM',
         status: 'Red',
@@ -188,6 +199,7 @@ export class FlaggingService {
     
     if (!englishProficiency) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'English Proficiency',
         field: 'englishProficiency',
         status: 'Red',
@@ -217,6 +229,7 @@ export class FlaggingService {
     
     if (isEligible) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'English Proficiency',
         field: 'englishProficiency',
         status: 'Green',
@@ -224,6 +237,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'English Proficiency',
         field: 'englishProficiency',
         status: 'Red',
@@ -237,6 +251,7 @@ export class FlaggingService {
     
     if (!postGradTraining) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Postgrad Training',
         field: 'postGradTraining',
         status: 'Red',
@@ -254,6 +269,7 @@ export class FlaggingService {
     
     if (condition1 || condition2) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Postgrad Training',
         field: 'postGradTraining',
         status: 'Green',
@@ -261,6 +277,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Postgrad Training',
         field: 'postGradTraining',
         status: 'Red',
@@ -271,6 +288,7 @@ export class FlaggingService {
     // Check completion of 2-year postgrad
     if (months >= 24) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Postgrad Training',
         field: 'twoYearPostgradCompleted',
         status: 'Green',
@@ -278,6 +296,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Postgrad Training',
         field: 'twoYearPostgradCompleted',
         status: 'Red',
@@ -291,6 +310,7 @@ export class FlaggingService {
     
     if (rotationsCompleted >= 7) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Rotations',
         field: 'rotationsCompleted',
         status: 'Green',
@@ -298,6 +318,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Rotations',
         field: 'rotationsCompleted',
         status: 'Red',
@@ -311,6 +332,7 @@ export class FlaggingService {
     
     if (!hasImpairmentToPractice) {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Impairment to Practice',
         field: 'hasImpairmentToPractice',
         status: 'Green',
@@ -318,6 +340,7 @@ export class FlaggingService {
       });
     } else {
       flags.push({
+        id: Math.random().toString(36).substring(2, 9),
         category: 'Impairment to Practice',
         field: 'hasImpairmentToPractice',
         status: 'Red',
