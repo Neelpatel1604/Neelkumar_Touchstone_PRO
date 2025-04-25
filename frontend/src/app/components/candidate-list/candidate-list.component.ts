@@ -64,7 +64,6 @@ export class CandidateListComponent implements OnInit {
     this.loading = true;
     this.candidateService.getAllStoredCandidates().subscribe({
       next: (response) => {
-        console.log('Received response:', response);
         if (response.success && response.data) {
           // Ensure candidates is always an array
           if (Array.isArray(response.data)) {
@@ -72,11 +71,8 @@ export class CandidateListComponent implements OnInit {
           } else if (response.data && typeof response.data === 'object' && 'candidates' in response.data) {
             this.candidates = (response.data as PaginatedResponse).candidates;
           } else {
-            console.error('Unexpected data format:', response.data);
             this.candidates = [];
           }
-          
-          console.log('Parsed candidates:', this.candidates);
           
           // Ensure each candidate has the correct structure
           this.candidates = this.candidates.map(candidate => {
@@ -98,7 +94,6 @@ export class CandidateListComponent implements OnInit {
         this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error('Error loading candidates:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

@@ -23,7 +23,6 @@ export class CandidateService {
   constructor(private http: HttpClient) { }
   
   evaluateCandidate(candidate: Candidate): Observable<CandidateEvaluationResponse> {
-    console.log('Sending candidate data:', candidate);
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     
     // Create a copy to avoid modifying the original
@@ -36,13 +35,10 @@ export class CandidateService {
         preparedCandidate.englishProficiency.score.toString();
     }
     
-    console.log('Prepared data:', preparedCandidate);
-    
     return this.http.post<CandidateEvaluationResponse>(`${this.apiUrl}/evaluate`, preparedCandidate, { headers })
       .pipe(
         timeout(60000), // Increase timeout to 60 seconds for large responses
         catchError(error => {
-          console.error('API Error:', error);
           if (error.name === 'TimeoutError') {
             return throwError(() => new Error('Request timed out. The server took too long to respond.'));
           }
@@ -58,7 +54,6 @@ export class CandidateService {
     return this.http.patch<ApiResponse>(url, { acknowledged, overridden }, { headers })
       .pipe(
         catchError(error => {
-          console.error('API Error updating flag:', error);
           return throwError(() => error);
         })
       );
@@ -68,7 +63,6 @@ export class CandidateService {
     return this.http.get<ApiResponse>(`${this.apiUrl}`)
       .pipe(
         catchError(error => {
-          console.error('API Error getting candidates:', error);
           return throwError(() => error);
         })
       );
@@ -78,7 +72,6 @@ export class CandidateService {
     return this.http.get<ApiResponse>(`${this.apiUrl}/${candidateId}`)
       .pipe(
         catchError(error => {
-          console.error('API Error getting candidate:', error);
           return throwError(() => error);
         })
       );
@@ -87,7 +80,6 @@ export class CandidateService {
   return this.http.get<{success: boolean, data?: StoredCandidate[], message?: string}>(`${this.apiUrl}/stored`)
     .pipe(
       catchError(error => {
-        console.error('API Error getting stored candidates:', error);
         return throwError(() => error);
       })
     );

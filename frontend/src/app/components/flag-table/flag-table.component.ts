@@ -69,32 +69,17 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
   ) {}
   
   ngOnInit() {
-    console.log('Flag table initialized with:', {
-      flags: this.flags?.length || 0,
-      candidateId: this.candidateId
-    });
     this.calculateFlagCounts();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('Flag table inputs changed:', {
-      flags: this.flags?.length || 0,
-      candidateId: this.candidateId
-    });
-    
     if (changes['evaluationResult'] && this.evaluationResult) {
       this.categorizeFlags();
       
       if (!this.candidateId && this.evaluationResult && 'candidateId' in this.evaluationResult) {
         this.candidateId = this.evaluationResult.candidateId as string;
       }
-      
-      console.log('FlagTable received candidateId:', this.candidateId);
-      console.log('FlagTable received flags count:', this.evaluationResult?.flags?.length || 0);
     }
-
-    console.log('Flag-table received flags:', this.flags);
-    console.log('Flag-table received candidateId:', this.candidateId);
 
     if (this.flags) {
       this.calculateFlagCounts();
@@ -102,10 +87,8 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private renderInChunks() {
-    // Use NgZone.runOutsideAngular to avoid triggering change detection
     this.ngZone.runOutsideAngular(() => {
       setTimeout(() => {
-        // Run any heavy calculations here
         this.ngZone.run(() => {
           // Then update the UI when ready
         });
@@ -118,9 +101,6 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
     
     this.redFlags = this.evaluationResult?.flags?.filter(flag => flag.status === 'Red') || [];
     this.greenFlags = this.evaluationResult?.flags?.filter(flag => flag.status === 'Green') || [];
-    
-    console.log('Red flags:', this.redFlags.length);
-    console.log('Green flags:', this.greenFlags.length);
   }
   
   getSeverity(status: string): string {
@@ -130,8 +110,6 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
   calculateFlagCounts() {
     this.countRedFlags = this.flags.filter(flag => flag.status === 'Red' && !flag.overridden).length;
     this.countGreenFlags = this.flags.filter(flag => flag.status === 'Green' || flag.overridden).length;
-    console.log('Red flags:', this.countRedFlags);
-    console.log('Green flags:', this.countGreenFlags);
   }
   
   updateFlag(flag: Flag) {
@@ -144,7 +122,6 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
       return;
     }
     
-    console.log('Updating flag:', flag);
     this.candidateService.updateFlagStatus(
       this.candidateId, 
       flag.id, 
@@ -170,7 +147,6 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
         }
       },
       error: (error) => {
-        console.error('Error updating flag:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

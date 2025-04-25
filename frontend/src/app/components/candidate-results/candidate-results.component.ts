@@ -43,7 +43,7 @@ export class CandidateResultsComponent implements OnChanges {
   ngOnChanges() {
     if (this.evaluationResult && this.evaluationResult.flags) {
       this.flags = this.evaluationResult.flags;
-      console.log('Flags received with IDs:', this.flags.map(f => ({ id: f.id, status: f.status })));
+      
       this.calculateFlagCounts();
     }
   }

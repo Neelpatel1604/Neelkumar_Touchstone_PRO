@@ -219,17 +219,10 @@ export class CandidateFormComponent implements OnInit {
       life: 5000
     });
 
-    console.log('Form data being submitted:', candidate);
-
     // Simplified approach
     this.candidateService.evaluateCandidate(candidate).subscribe({
       next: (response) => {
-        console.log('Response received:', response);
-        
         if (response?.success && response?.data) {
-          console.log('Setting data from response');
-          
-          // First update just the essential data
           this.candidateId = response.data.candidateId || null;
           this.submitting = false;
           this.cdr.detectChanges(); // Force update
@@ -256,9 +249,6 @@ export class CandidateFormComponent implements OnInit {
                 candidateId: response.data!.candidateId || ''
               };
               
-              console.log('Setting evaluation result with generated flag IDs:', this.evaluationResult);
-              console.log('Setting candidate ID:', this.candidateId);
-              
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -276,7 +266,6 @@ export class CandidateFormComponent implements OnInit {
               }, 200);
             }, 100);
           } else {
-            console.error('Response data is not in expected format:', response.data);
             this.messageService.add({
               severity: 'error',
               summary: 'Data Format Error',
@@ -296,7 +285,6 @@ export class CandidateFormComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Evaluation error:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -361,7 +349,6 @@ export class CandidateFormComponent implements OnInit {
       candidateId: 'test-id'
     };
     this.candidateId = 'test-id';
-    console.log('Test data set for flag-table');
     this.cdr.detectChanges();
   }
 }

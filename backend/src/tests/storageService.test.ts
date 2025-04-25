@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // Helper to create a clean isolated StorageService for each test
-function createIsolatedStorageService() {
+async function createIsolatedStorageService() {
   const testFilePath = path.join(__dirname, `../../data/test-candidates-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.json`);
   
   // Ensure the directory exists
@@ -15,7 +15,7 @@ function createIsolatedStorageService() {
     fs.mkdirSync(dir, { recursive: true });
   }
   
-  // Create an empty file
+  // Create empty file
   fs.writeFileSync(testFilePath, JSON.stringify([]));
   
   const storageService = new StorageService();
@@ -24,6 +24,9 @@ function createIsolatedStorageService() {
   // Reset the candidates array to ensure isolation
   // @ts-ignore - Access private property for testing
   storageService.candidates = [];
+  
+  // Wait for initialization to complete
+  await new Promise(resolve => setTimeout(resolve, 100));
   
   return { storageService, testFilePath };
 }
@@ -70,8 +73,8 @@ describe('StorageService', () => {
     }
   });
   
-  test('should store a candidate and return an ID', () => {
-    const { storageService, testFilePath } = createIsolatedStorageService();
+  test('should store a candidate and return an ID', async () => {
+    const { storageService, testFilePath } = await createIsolatedStorageService();
     
     try {
       // Create mock evaluation
@@ -87,7 +90,7 @@ describe('StorageService', () => {
         ]
       };
       
-      const id = storageService.storeCandidate(mockCandidate, mockEvaluation);
+      const id = await storageService.storeCandidate(mockCandidate, mockEvaluation);
       expect(id).toBeTruthy();
       
       // Verify it was stored
@@ -102,8 +105,8 @@ describe('StorageService', () => {
     }
   });
   
-  test('should update flag status', () => {
-    const { storageService, testFilePath } = createIsolatedStorageService();
+  test('should update flag status', async () => {
+    const { storageService, testFilePath } = await createIsolatedStorageService();
     
     try {
       // Create mock evaluation with a flag that has an ID field
@@ -120,10 +123,10 @@ describe('StorageService', () => {
         ]
       };
       
-      const id = storageService.storeCandidate(mockCandidate, mockEvaluation);
+      const id = await storageService.storeCandidate(mockCandidate, mockEvaluation);
       
       // Update the flag using the known ID
-      const result = storageService.updateFlagStatus(id, 'test-flag-id', true, true);
+      const result = await storageService.updateFlagStatus(id, 'test-flag-id', true, true);
       expect(result).toBe(true);
       
       // Verify the update
@@ -138,8 +141,8 @@ describe('StorageService', () => {
     }
   });
   
-  test('should recalculate eligibility when flags are overridden', () => {
-    const { storageService, testFilePath } = createIsolatedStorageService();
+  test('should recalculate eligibility when flags are overridden', async () => {
+    const { storageService, testFilePath } = await createIsolatedStorageService();
     
     try {
       // Create a candidate with a Red flag with a specific ID
@@ -156,14 +159,15 @@ describe('StorageService', () => {
         ]
       };
       
-      const id = storageService.storeCandidate(mockCandidate, redFlagEvaluation);
+      // Await the Promise to get the ID
+      const id = await storageService.storeCandidate(mockCandidate, redFlagEvaluation);
       
       // Verify initially not eligible
       const initialCandidate = storageService.getCandidateById(id);
       expect(initialCandidate?.evaluation.isEligible).toBe(false);
       
       // Override the red flag with known ID
-      const result = storageService.updateFlagStatus(id, 'red-flag-id', true, true);
+      const result = await storageService.updateFlagStatus(id, 'red-flag-id', true, true);
       expect(result).toBe(true);
       
       // Check if eligibility was recalculated
@@ -177,11 +181,11 @@ describe('StorageService', () => {
     }
   });
   
-  test('should return false for non-existent candidate ID', () => {
-    const { storageService, testFilePath } = createIsolatedStorageService();
+  test('should return false for non-existent candidate ID', async () => {
+    const { storageService, testFilePath } = await createIsolatedStorageService();
     
     try {
-      const result = storageService.updateFlagStatus('non-existent-id', 'flag-id', true, true);
+      const result = await storageService.updateFlagStatus('non-existent-id', 'flag-id', true, true);
       expect(result).toBe(false);
     } finally {
       // Clean up
@@ -191,8 +195,8 @@ describe('StorageService', () => {
     }
   });
   
-  test('should return false for non-existent flag ID', () => {
-    const { storageService, testFilePath } = createIsolatedStorageService();
+  test('should return false for non-existent flag ID', async () => {
+    const { storageService, testFilePath } = await createIsolatedStorageService();
     
     try {
       // First store a candidate
@@ -209,10 +213,10 @@ describe('StorageService', () => {
         ]
       };
       
-      const id = storageService.storeCandidate(mockCandidate, mockEvaluation);
+      const id = await storageService.storeCandidate(mockCandidate, mockEvaluation);
       
       // Try to update with invalid flag ID
-      const result = storageService.updateFlagStatus(id, 'non-existent-flag-id', true, true);
+      const result = await storageService.updateFlagStatus(id, 'non-existent-flag-id', true, true);
       expect(result).toBe(false);
     } finally {
       // Clean up
