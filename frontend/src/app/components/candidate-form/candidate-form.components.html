@@ -51,7 +51,7 @@
                             <div class="col-12 md:col-6">
                                 <div class="field">
                                     <label for="dateOfBirth" class="font-bold">Date of Birth *</label>
-                                    <p-calendar id="dateOfBirth" formControlName="dateOfBirth" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+                                    <p-datePicker id="dateOfBirth" formControlName="dateOfBirth" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-datePicker>
                                     <small *ngIf="candidateForm.get('dateOfBirth')?.invalid && candidateForm.get('dateOfBirth')?.touched" class="p-error">
                                         Date of birth is required
                                     </small>
@@ -61,7 +61,7 @@
                             <div class="col-12 md:col-6">
                                 <div class="field">
                                     <label for="legalStatus" class="font-bold">Legal Status *</label>
-                                    <p-dropdown id="legalStatus" [options]="legalStatusOptions" formControlName="legalStatus" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Legal Status" class="w-full"></p-dropdown>
+                                    <p-select formControlName="legalStatus" [options]="legalStatusOptions" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Legal Status" class="w-full"></p-select>
                                     <small *ngIf="candidateForm.get('legalStatus')?.invalid && candidateForm.get('legalStatus')?.touched" class="p-error">
                                         Legal status is required
                                     </small>
@@ -125,21 +125,21 @@
                             <div class="col-12 md:col-4">
                                 <div class="field">
                                     <label for="nacDate" class="font-bold">NAC Date</label>
-                                    <p-calendar id="nacDate" formControlName="nacDate" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+                                    <p-datePicker id="nacDate" formControlName="nacDate" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-datePicker>
                                 </div>
                             </div>
 
                             <div class="col-12 md:col-4">
                                 <div class="field">
                                     <label for="mccqe1Date" class="font-bold">MCCQE1 Date</label>
-                                    <p-calendar id="mccqe1Date" formControlName="mccqe1Date" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+                                    <p-datePicker id="mccqe1Date" formControlName="mccqe1Date" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-datePicker>
                                 </div>
                             </div>
 
                             <div class="col-12 md:col-4">
                                 <div class="field">
                                     <label for="mccqe2Date" class="font-bold">MCCQE2 Date</label>
-                                    <p-calendar id="mccqe2Date" formControlName="mccqe2Date" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-calendar>
+                                    <p-datePicker id="mccqe2Date" formControlName="mccqe2Date" [showIcon]="true" dateFormat="yy-mm-dd" class="w-full"></p-datePicker>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                             <div class="col-12 md:col-6">
                                 <div class="field">
                                     <label for="writtenTDM" class="font-bold d-block">Written TDM *</label>
-                                    <p-dropdown id="writtenTDM" [options]="tdmOptions" formControlName="writtenTDM" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select TDM Status" class="w-full"></p-dropdown>
+                                    <p-select id="writtenTDM" [options]="tdmOptions" formControlName="writtenTDM" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select TDM Status" class="w-full"></p-select>
                                     <small *ngIf="candidateForm.get('writtenTDM')?.invalid && candidateForm.get('writtenTDM')?.touched" class="p-error">
                                         TDM status is required
                                     </small>
@@ -195,7 +195,7 @@
                                 <div class="col-12 md:col-6">
                                     <div class="field">
                                         <label for="englishProficiencyType" class="font-bold">Proficiency Type *</label>
-                                        <p-dropdown id="englishProficiencyType" [options]="englishProficiencyTypes" formControlName="type" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Type" class="w-full"></p-dropdown>
+                                        <p-select id="englishProficiencyType" [options]="englishProficiencyTypes" formControlName="type" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Type" class="w-full"></p-select>
                                         <small *ngIf="candidateForm.get('englishProficiency.type')?.invalid && candidateForm.get('englishProficiency.type')?.touched" class="p-error">
                                             Proficiency type is required
                                         </small>
@@ -306,7 +306,13 @@
     </p-card>
     
     <!-- Flag Table -->
-    <div *ngIf="evaluationResult">
-        <app-flag-table [evaluationResult]="evaluationResult" [candidateId]="candidateId"></app-flag-table>
+    <div *ngIf="evaluationResult && evaluationResult.flags && evaluationResult.flags.length > 0">
+        <!-- Add debug output to verify data -->
+        <p>Debug: {{evaluationResult.flags.length}} flags found</p>
+        
+        <app-flag-table 
+            [flags]="evaluationResult.flags"
+            [candidateId]="candidateId">
+        </app-flag-table>
     </div>
 </div>

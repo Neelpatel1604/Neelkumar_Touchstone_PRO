@@ -5,7 +5,8 @@ export class FlaggingService {
   
   evaluateCandidate(candidate: Candidate): EvaluationResult {
     try {
-      console.log('Processing candidate:', JSON.stringify(candidate, null, 2));
+      // Log only essential data to avoid large console output
+      console.log('Processing candidate:', candidate.firstName, candidate.lastName);
       const flags: Flag[] = [];
       
       // Personal Information Validation
@@ -48,6 +49,7 @@ export class FlaggingService {
       return {
         isEligible: false,
         flags: [{
+          id: Math.random().toString(36).substring(2, 9), 
           category: 'System Error',
           field: 'evaluation',
           status: 'Red',

@@ -1,7 +1,14 @@
 <div class="container">
   <p-toast></p-toast>
   
-  <div *ngIf="evaluationResult">
+  <!-- Show loading spinner when in submitting state -->
+  <div *ngIf="submitting" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Processing evaluation...</p>
+  </div>
+  
+  <!-- Show evaluation results only when not loading and results exist -->
+  <div *ngIf="!submitting && evaluationResult">
     <p-card header="Flagged Items" styleClass="p-mt-4">
       <!-- Red Flags Section -->
       <div *ngIf="redFlags.length > 0" class="p-mb-4">
@@ -66,6 +73,7 @@
         </div>
       </div>
       
+      <!-- Only show "No flags" message if both red and green flags are empty -->
       <div *ngIf="redFlags.length === 0 && greenFlags.length === 0">
         <p>No flags to display.</p>
       </div>

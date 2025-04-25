@@ -1,9 +1,9 @@
 // frontend/src/app/services/candidate.service.ts (updated)
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, timeout, catchError, throwError } from 'rxjs';
+import { Observable, timeout, catchError, throwError, retry } from 'rxjs';
 import { Candidate } from '../models/candidate.model';
-import { ApiResponse, EvaluationResult, Flag } from '../models/flag.model';
+import { ApiResponse, EvaluationResult, Flag, CandidateEvaluationResponse } from '../models/flag.model';
 
 interface StoredCandidate {
   id: string;
@@ -22,7 +22,7 @@ export class CandidateService {
 
   constructor(private http: HttpClient) { }
   
-  evaluateCandidate(candidate: Candidate): Observable<ApiResponse> {
+  evaluateCandidate(candidate: Candidate): Observable<CandidateEvaluationResponse> {
     console.log('Sending candidate data:', candidate);
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     
@@ -38,11 +38,14 @@ export class CandidateService {
     
     console.log('Prepared data:', preparedCandidate);
     
-    return this.http.post<ApiResponse>(`${this.apiUrl}/evaluate`, preparedCandidate, { headers })
+    return this.http.post<CandidateEvaluationResponse>(`${this.apiUrl}/evaluate`, preparedCandidate, { headers })
       .pipe(
-        timeout(30000),
+        timeout(60000), // Increase timeout to 60 seconds for large responses
         catchError(error => {
           console.error('API Error:', error);
+          if (error.name === 'TimeoutError') {
+            return throwError(() => new Error('Request timed out. The server took too long to respond.'));
+          }
           return throwError(() => error);
         })
       );

@@ -1,9 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
+import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
@@ -14,11 +13,15 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { PanelModule } from 'primeng/panel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DOCUMENT } from '@angular/common';
+import { SelectModule } from 'primeng/select';
+import { NgZone } from '@angular/core';
 
 import { Candidate } from '../../models/candidate.model';
 import { CandidateService } from '../../services/candidate.service';
 import { FlagTableComponent } from '../flag-table/flag-table.component';
 import { EvaluationResult } from '../../models/flag.model';
+import { Flag } from '../../models/flag.model';
 
 @Component({
   selector: 'app-candidate-form',
@@ -28,8 +31,7 @@ import { EvaluationResult } from '../../models/flag.model';
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,
-    CalendarModule,
-    DropdownModule,
+    DatePickerModule,
     RadioButtonModule,
     InputNumberModule,
     ButtonModule,
@@ -39,7 +41,8 @@ import { EvaluationResult } from '../../models/flag.model';
     FlagTableComponent,
     StepsModule,
     PanelModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    SelectModule
   ],
   providers: [MessageService, CandidateService],
   templateUrl: './candidate-form.components.html',
@@ -71,11 +74,35 @@ export class CandidateFormComponent implements OnInit {
   items: MenuItem[] = [];
   activeIndex: number = 0;
 
+  // Add this property to test flag-table component
+  testFlags: Flag[] = [
+    { 
+      id: 'test1', 
+      category: 'Test', 
+      field: 'test', 
+      status: 'Red', 
+      message: 'Test flag', 
+      acknowledged: false, 
+      overridden: false 
+    },
+    { 
+      id: 'test2', 
+      category: 'Test', 
+      field: 'test2', 
+      status: 'Green', 
+      message: 'Test flag 2', 
+      acknowledged: false, 
+      overridden: false 
+    }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private candidateService: CandidateService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    @Inject(DOCUMENT) private document: Document,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -176,62 +203,98 @@ export class CandidateFormComponent implements OnInit {
     }
 
     this.submitting = true;
-    this.cdr.markForCheck();
+    this.evaluationResult = null; // Clear previous results
+    this.cdr.detectChanges(); // Force immediate update
     
     const candidate: Candidate = this.candidateForm.value;
 
-    // Show loading message
     this.messageService.add({
       severity: 'info',
       summary: 'Processing',
-      detail: 'Evaluating candidate...'
+      detail: 'Evaluating candidate...',
+      life: 5000
     });
 
     console.log('Form data being submitted:', candidate);
 
+    // Simplified approach
     this.candidateService.evaluateCandidate(candidate).subscribe({
       next: (response) => {
         console.log('Response received:', response);
-        this.submitting = false;
         
-        if (response && response.success === true && response.data) {
-          // Create a clean copy without circular references
-          const cleanResult = JSON.parse(JSON.stringify(response.data));
-          this.evaluationResult = cleanResult;
-          this.candidateId = cleanResult.candidateId || null;
+        if (response?.success && response?.data) {
+          console.log('Setting data from response');
           
-          console.log('Setting evaluation result:', this.evaluationResult);
-          console.log('Setting candidate ID:', this.candidateId);
+          // First update just the essential data
+          this.candidateId = response.data.candidateId || null;
+          this.submitting = false;
+          this.cdr.detectChanges(); // Force update
           
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Candidate has been evaluated successfully.'
-          });
-          
-          // Force change detection to update the UI with the new evaluationResult
-          this.cdr.markForCheck();
+          // Type check and cast the data properly
+          if (this.isEvaluationResult(response.data)) {
+            // Then add the full evaluation result after a brief delay
+            setTimeout(() => {
+              // Create a clean copy and properly cast it to EvaluationResult
+              this.evaluationResult = {
+                isEligible: response.data!.isEligible ?? false,
+                flags: response.data!.flags || [],
+                candidateId: response.data!.candidateId || ''
+              };
+              
+              console.log('Setting evaluation result:', this.evaluationResult);
+              console.log('Setting candidate ID:', this.candidateId);
+              
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Candidate has been evaluated successfully.'
+              });
+              
+              this.cdr.detectChanges(); // Force update again
+              
+              // Add debugging to see if flag-table component will be shown
+              console.log('Flag count:', this.evaluationResult?.flags?.length);
+              console.log('Should show flag-table:', 
+                this.evaluationResult && this.evaluationResult.flags && this.evaluationResult.flags.length > 0);
+            }, 100);
+          } else {
+            console.error('Response data is not in expected format:', response.data);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Data Format Error',
+              detail: 'The response from the server is not in the expected format.'
+            });
+            this.submitting = false;
+            this.cdr.detectChanges();
+          }
         } else {
-          console.error('Response not successful', response);
           this.messageService.add({
             severity: 'error',
             summary: 'Evaluation Failed',
             detail: response?.message || 'Server returned an unsuccessful response.'
           });
-          this.cdr.markForCheck();
+          this.submitting = false;
+          this.cdr.detectChanges();
         }
       },
       error: (error) => {
-        console.error('Evaluation error details:', error);
-        this.submitting = false;
+        console.error('Evaluation error:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to evaluate candidate: ' + (error.message || 'Unknown error')
         });
-        this.cdr.markForCheck();
+        this.submitting = false;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  // Add this helper method to check the response type
+  private isEvaluationResult(data: any): data is EvaluationResult {
+    return data && 
+      typeof data.isEligible === 'boolean' && 
+      Array.isArray(data.flags);
   }
 
   // Helper method to mark all controls in a form group as touched
@@ -267,5 +330,20 @@ export class CandidateFormComponent implements OnInit {
       window.scrollTo(0, 0);
       this.cdr.markForCheck();
     }
+  }
+
+  // Add a test button to your template
+  // <button type="button" (click)="testFlagTable()">Test Flag Table</button>
+
+  testFlagTable() {
+    // Set test data to verify flag-table rendering
+    this.evaluationResult = {
+      isEligible: false,
+      flags: this.testFlags,
+      candidateId: 'test-id'
+    };
+    this.candidateId = 'test-id';
+    console.log('Test data set for flag-table');
+    this.cdr.detectChanges();
   }
 }

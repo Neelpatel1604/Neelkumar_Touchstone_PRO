@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy, NgZone, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -34,42 +34,76 @@ import { CandidateService } from '../../services/candidate.service';
     ProgressSpinnerModule
   ],
   providers: [MessageService],
+  changeDetection: ChangeDetectionStrategy.Default,
   templateUrl: './flag-table.component.html',
   styleUrl: './flag-table.component.css'
 })
-export class FlagTableComponent implements OnChanges {
+export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() evaluationResult: EvaluationResult | null = null;
   @Input() candidateId: string | null = null;
+  @Input() flags: Flag[] = [];
+  @Input() submitting: boolean = false;
   
   redFlags: Flag[] = [];
   greenFlags: Flag[] = [];
   
-  submitting = false;
-  
+  private _cachedCategories: { category: string, flags: Flag[] }[] | null = null;
+  private _lastProcessedFlags: Flag[] | null = null;
+
+  ngAfterViewInit() {
+    if (this.flags.length > 5) {
+      this.renderInChunks();
+    }
+  }
+
   constructor(
     private candidateService: CandidateService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private ngZone: NgZone
   ) {}
   
+  ngOnInit() {
+    console.log('Flag table initialized with:', {
+      flags: this.flags?.length || 0,
+      candidateId: this.candidateId
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('Flag table inputs changed:', {
+      flags: this.flags?.length || 0,
+      candidateId: this.candidateId
+    });
+    
     if (changes['evaluationResult'] && this.evaluationResult) {
       this.categorizeFlags();
       
-      // If candidateId wasn't provided directly but is in the evaluationResult
       if (!this.candidateId && this.evaluationResult && 'candidateId' in this.evaluationResult) {
         this.candidateId = this.evaluationResult.candidateId as string;
       }
       
       console.log('FlagTable received candidateId:', this.candidateId);
-      console.log('FlagTable received flags:', this.evaluationResult.flags);
+      console.log('FlagTable received flags count:', this.evaluationResult?.flags?.length || 0);
     }
   }
-  
+
+  private renderInChunks() {
+    // Use NgZone.runOutsideAngular to avoid triggering change detection
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        // Run any heavy calculations here
+        this.ngZone.run(() => {
+          // Then update the UI when ready
+        });
+      }, 0);
+    });
+  }
+
   categorizeFlags(): void {
     if (!this.evaluationResult) return;
     
-    this.redFlags = this.evaluationResult.flags.filter(flag => flag.status === 'Red');
-    this.greenFlags = this.evaluationResult.flags.filter(flag => flag.status === 'Green');
+    this.redFlags = this.evaluationResult?.flags?.filter(flag => flag.status === 'Red') || [];
+    this.greenFlags = this.evaluationResult?.flags?.filter(flag => flag.status === 'Green') || [];
     
     console.log('Red flags:', this.redFlags.length);
     console.log('Green flags:', this.greenFlags.length);
@@ -80,7 +114,6 @@ export class FlagTableComponent implements OnChanges {
   }
   
   acknowledgeFlag(flag: Flag, event?: Event): void {
-    // Add stop propagation to prevent event bubbling
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -119,7 +152,6 @@ export class FlagTableComponent implements OnChanges {
             detail: `Flag has been ${flag.acknowledged ? 'acknowledged' : 'unacknowledged'}`
           });
           
-          // Update the evaluation result if returned
           if (response.data) {
             this.evaluationResult = response.data;
             this.categorizeFlags();
@@ -140,7 +172,6 @@ export class FlagTableComponent implements OnChanges {
           detail: 'Failed to update flag status: ' + (error.message || 'Unknown error')
         });
         
-        // Revert the UI change since the server update failed
         flag.acknowledged = !flag.acknowledged;
       }
     });
@@ -185,7 +216,6 @@ export class FlagTableComponent implements OnChanges {
             detail: `Flag has been ${flag.overridden ? 'overridden' : 'reset to original status'}`
           });
           
-          // Update the evaluation result if returned
           if (response.data) {
             this.evaluationResult = response.data;
             this.categorizeFlags();
@@ -206,33 +236,39 @@ export class FlagTableComponent implements OnChanges {
           detail: 'Failed to override flag: ' + (error.message || 'Unknown error')
         });
         
-        // Revert the UI change since the server update failed
         flag.overridden = !flag.overridden;
       }
     });
   }
   
   getFlagsByCategoryForDisplay(flags: Flag[]): { category: string, flags: Flag[] }[] {
-    const flagsByCategory: { [key: string]: Flag[] } = {};
-    
-    flags.forEach(flag => {
-      if (!flagsByCategory[flag.category]) {
-        flagsByCategory[flag.category] = [];
+    if (!this._cachedCategories || this._lastProcessedFlags !== flags) {
+      const flagsByCategory: { [key: string]: Flag[] } = {};
+      
+      for (const flag of flags) {
+        if (!flagsByCategory[flag.category]) {
+          flagsByCategory[flag.category] = [];
+        }
+        flagsByCategory[flag.category].push(flag);
       }
-      flagsByCategory[flag.category].push(flag);
-    });
+      
+      this._cachedCategories = Object.keys(flagsByCategory).map(category => ({
+        category,
+        flags: flagsByCategory[category]
+      }));
+      
+      this._lastProcessedFlags = flags;
+    }
     
-    return Object.keys(flagsByCategory).map(category => ({
-      category,
-      flags: flagsByCategory[category]
-    }));
+    return this._cachedCategories;
   }
   
   resetForm(): void {
-    // Reset any state if needed
     this.evaluationResult = null;
     this.candidateId = null;
     this.redFlags = [];
     this.greenFlags = [];
+    this._cachedCategories = null;
+    this._lastProcessedFlags = null;
   }
 }

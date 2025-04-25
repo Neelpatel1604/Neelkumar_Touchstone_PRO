@@ -1,7 +1,7 @@
 // frontend/src/app/models/flag.model.ts
 export interface ApiResponse {
   success: boolean;
-  data?: EvaluationResult;
+  data?: any;
   message?: string;
 }
 
@@ -14,11 +14,22 @@ export interface EvaluationResult {
 export type FlagType = 'Red' | 'Green';
 
 export interface Flag {
-  id?: string;
+  id: string;
   category: string;
   field: string;
-  status: FlagType;
+  status: 'Red' | 'Green' | string;
   message: string;
   acknowledged?: boolean;
   overridden?: boolean;
+}
+
+// Add a specific response type for candidate evaluation
+export interface CandidateEvaluationResponse {
+  success: boolean;
+  data?: {
+    isEligible: boolean;
+    flags: Flag[];
+    candidateId: string;
+  };
+  message?: string;
 }

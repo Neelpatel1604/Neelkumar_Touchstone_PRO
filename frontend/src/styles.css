@@ -6,6 +6,8 @@
 /* In frontend/src/styles.css */
 
 /* In frontend/src/styles.css */
+/* @import 'primeng/resources/themes/aura/theme.css';
+@import 'primeng/resources/primeng.min.css'; */
 
 * {
   box-sizing: border-box;
@@ -51,4 +53,24 @@ body {
 
 .align-items-center {
   align-items: center;
+}
+
+/* Add this to handle animation performance issues */
+.p-component-overlay {
+  transition: none !important;
+}
+
+.p-datepicker {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Optional loading overlay styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
 }

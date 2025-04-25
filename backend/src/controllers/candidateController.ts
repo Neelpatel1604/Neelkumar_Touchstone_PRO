@@ -13,9 +13,12 @@ export class CandidateController {
     this.storageService = new StorageService();
   }
   
-  evaluateCandidate = (req: Request, res: Response): void => {
+  evaluateCandidate = async (req: Request, res: Response): Promise<void> => {
     try {
-      console.log('Receiving candidate data:', JSON.stringify(req.body, null, 2));
+      // Log only essential information instead of the entire object
+      console.log('Receiving candidate data for:', 
+        req.body.firstName, req.body.lastName, req.body.email);
+      
       const candidateData: Candidate = req.body;
       
       // Additional validation
@@ -33,12 +36,13 @@ export class CandidateController {
       // Evaluate the candidate
       const evaluationResult = this.flaggingService.evaluateCandidate(candidateData);
       
-      // Store the candidate and evaluation
-      const candidateId = this.storageService.storeCandidate(candidateData, evaluationResult);
+      // Store the candidate and evaluation asynchronously
+      const candidateId = await this.storageService.storeCandidate(candidateData, evaluationResult);
       
       // Log successful evaluation
-      console.log('Candidate evaluation completed successfully');
+      console.log('Candidate evaluation completed successfully for ID:', candidateId);
       
+      // Send a streamlined response
       res.status(200).json({
         success: true,
         data: {
@@ -56,7 +60,7 @@ export class CandidateController {
     }
   };
   
-  updateFlag = (req: Request, res: Response): void => {
+  updateFlag = async (req: Request, res: Response): Promise<void> => {
     try {
       const { candidateId, flagId } = req.params;
       const { acknowledged, overridden } = req.body;
@@ -69,7 +73,7 @@ export class CandidateController {
         return;
       }
       
-      const success = this.storageService.updateFlagStatus(
+      const success = await this.storageService.updateFlagStatus(
         candidateId,
         flagId,
         acknowledged,
@@ -145,11 +149,30 @@ export class CandidateController {
   };
   getStoredCandidates = (req: Request, res: Response): void => {
     try {
-      const candidates = this.storageService.getAllCandidates();
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
       
+      // Get total candidates count
+      const allCandidates = this.storageService.getAllCandidates();
+      const total = allCandidates.length;
+      
+      // Calculate pagination
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const paginatedCandidates = allCandidates.slice(startIndex, endIndex);
+      
+      // Return paginated data
       res.status(200).json({
         success: true,
-        data: candidates
+        data: {
+          candidates: paginatedCandidates,
+          pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit)
+          }
+        }
       });
     } catch (error) {
       console.error('Error retrieving stored candidates:', error);
