@@ -12,6 +12,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Badge, BadgeModule } from 'primeng/badge';
 
 import { EvaluationResult, Flag } from '../../models/flag.model';
 import { CandidateService } from '../../services/candidate.service';
@@ -31,7 +32,8 @@ import { CandidateService } from '../../services/candidate.service';
     MessagesModule,
     MessageModule,
     ToastModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    BadgeModule
   ],
   providers: [MessageService],
   changeDetection: ChangeDetectionStrategy.Default,
@@ -49,6 +51,9 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
   
   private _cachedCategories: { category: string, flags: Flag[] }[] | null = null;
   private _lastProcessedFlags: Flag[] | null = null;
+  
+  countRedFlags: number = 0;
+  countGreenFlags: number = 0;
 
   ngAfterViewInit() {
     if (this.flags.length > 5) {
@@ -67,6 +72,7 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
       flags: this.flags?.length || 0,
       candidateId: this.candidateId
     });
+    this.calculateFlagCounts();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -88,6 +94,10 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     console.log('Flag-table received flags:', this.flags);
     console.log('Flag-table received candidateId:', this.candidateId);
+
+    if (this.flags) {
+      this.calculateFlagCounts();
+    }
   }
 
   private renderInChunks() {
@@ -116,49 +126,40 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
     return status === 'Red' ? 'danger' : 'success';
   }
   
-  acknowledgeFlag(flag: Flag, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    if (!this.candidateId || !flag.id) {
-      console.warn('Cannot update flag - missing data:', { 
-        candidateId: this.candidateId, 
-        flagId: flag.id 
-      });
-      
+  calculateFlagCounts() {
+    this.countRedFlags = this.flags.filter(flag => flag.status === 'Red' && !flag.overridden).length;
+    this.countGreenFlags = this.flags.filter(flag => flag.status === 'Green' || flag.overridden).length;
+    console.log('Red flags:', this.countRedFlags);
+    console.log('Green flags:', this.countGreenFlags);
+  }
+  
+  updateFlag(flag: Flag) {
+    if (!this.candidateId) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Cannot update flag: Missing candidate ID or flag ID'
+        detail: 'Cannot update flag: Candidate ID is missing'
       });
       return;
     }
     
-    console.log('Acknowledging flag:', flag.id, 'for candidate:', this.candidateId);
-    flag.acknowledged = !flag.acknowledged;
-    
+    console.log('Updating flag:', flag);
     this.candidateService.updateFlagStatus(
-      this.candidateId,
-      flag.id,
-      flag.acknowledged || false,
+      this.candidateId, 
+      flag.id, 
+      flag.acknowledged || false, 
       flag.overridden || false
     ).subscribe({
       next: (response) => {
-        console.log('Flag acknowledgment response:', response);
-        
         if (response.success) {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: `Flag has been ${flag.acknowledged ? 'acknowledged' : 'unacknowledged'}`
+            detail: 'Flag status updated successfully'
           });
           
-          if (response.data) {
-            this.evaluationResult = response.data;
-            this.categorizeFlags();
-          }
+          // Recalculate flag counts
+          this.calculateFlagCounts();
         } else {
           this.messageService.add({
             severity: 'error',
@@ -168,78 +169,12 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
         }
       },
       error: (error) => {
-        console.error('Error updating flag status:', error);
+        console.error('Error updating flag:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to update flag status: ' + (error.message || 'Unknown error')
         });
-        
-        flag.acknowledged = !flag.acknowledged;
-      }
-    });
-  }
-  
-  overrideFlag(flag: Flag, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    if (!this.candidateId || !flag.id) {
-      console.warn('Cannot override flag - missing data:', { 
-        candidateId: this.candidateId, 
-        flagId: flag.id 
-      });
-      
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Cannot override flag: Missing candidate ID or flag ID'
-      });
-      return;
-    }
-    
-    console.log('Overriding flag:', flag.id, 'for candidate:', this.candidateId);
-    flag.overridden = !flag.overridden;
-    
-    this.candidateService.updateFlagStatus(
-      this.candidateId,
-      flag.id,
-      flag.acknowledged || false,
-      flag.overridden || false
-    ).subscribe({
-      next: (response) => {
-        console.log('Flag override response:', response);
-        
-        if (response.success) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: `Flag has been ${flag.overridden ? 'overridden' : 'reset to original status'}`
-          });
-          
-          if (response.data) {
-            this.evaluationResult = response.data;
-            this.categorizeFlags();
-          }
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: response.message || 'Failed to override flag'
-          });
-        }
-      },
-      error: (error) => {
-        console.error('Error overriding flag:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to override flag: ' + (error.message || 'Unknown error')
-        });
-        
-        flag.overridden = !flag.overridden;
       }
     });
   }
