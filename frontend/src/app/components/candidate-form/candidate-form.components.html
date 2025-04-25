@@ -305,29 +305,12 @@
         </form>
     </p-card>
     
-    <!-- Add this after the form section -->
-    <div *ngIf="evaluationResult && !submitting" class="mt-5 evaluation-results">
-        <p-card header="Candidate Evaluation Results">
-            <div class="evaluation-summary mb-4">
-                <h3>Eligibility Status: 
-                    <span [ngClass]="{'text-success': evaluationResult.isEligible, 'text-danger': !evaluationResult.isEligible}">
-                        {{evaluationResult.isEligible ? 'ELIGIBLE' : 'NOT ELIGIBLE'}}
-                    </span>
-                </h3>
-                
-                <hr/>
-                
-                <!-- Debug info to verify component is rendered -->
-                <p class="small text-muted">Candidate ID: {{candidateId}}</p>
-                <p class="small text-muted">Flags count: {{evaluationResult.flags?.length || 0}}</p>
-            </div>
-            
-            <!-- This should display your flag table -->
-            <app-flag-table 
-                [flags]="evaluationResult.flags" 
-                [candidateId]="candidateId">
-            </app-flag-table>
-        </p-card>
+    <!-- Add this at the end of your form where you want to show the results -->
+    <div *ngIf="evaluationResult && !submitting" class="mt-4">
+        <app-candidate-results 
+            [evaluationResult]="evaluationResult"
+            [candidateId]="candidateId">
+        </app-candidate-results>
     </div>
 
     <!-- Add this somewhere visible on your form -->

@@ -10,73 +10,76 @@
   <!-- Show evaluation results only when not loading and results exist -->
   <div *ngIf="!submitting && evaluationResult">
     <p-card header="Flagged Items" styleClass="p-mt-4">
-      <!-- Red Flags Section -->
-      <div *ngIf="redFlags.length > 0" class="p-mb-4">
-        <h3>Red Flags</h3>
-        <div *ngFor="let category of getFlagsByCategoryForDisplay(redFlags)">
-          <h4>{{ category.category }}</h4>
-          <p-table [value]="category.flags" styleClass="p-datatable-sm">
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Field</th>
-                <th>Status</th>
-                <th>Message</th>
-                <th>Actions</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-flag>
-              <tr>
-                <td>{{ flag.field }}</td>
-                <td>
-                  <p-tag [severity]="getSeverity(flag.status)" [value]="flag.status"></p-tag>
-                </td>
-                <td>{{ flag.message }}</td>
-                <td>
-                  <p-checkbox [(ngModel)]="flag.acknowledged" 
-                             (onChange)="acknowledgeFlag(flag, $event)" 
-                             [binary]="true" 
-                             label="Acknowledge"></p-checkbox>
-                  <p-checkbox [(ngModel)]="flag.overridden" 
-                             (onChange)="overrideFlag(flag, $event)" 
-                             [binary]="true" 
-                             label="Override"></p-checkbox>
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
+      <!-- Flag summary -->
+      <div class="mb-3 flag-summary">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="badge bg-success me-2">{{countGreenFlags}} Green Flags</span>
+            <span class="badge bg-danger">{{countRedFlags}} Red Flags</span>
+          </div>
         </div>
       </div>
       
-      <!-- Green Flags Section -->
-      <div *ngIf="greenFlags.length > 0">
-        <h3>Green Flags</h3>
-        <div *ngFor="let category of getFlagsByCategoryForDisplay(greenFlags)">
-          <h4>{{ category.category }}</h4>
-          <p-table [value]="category.flags" styleClass="p-datatable-sm">
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Field</th>
-                <th>Status</th>
-                <th>Message</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-flag>
-              <tr>
-                <td>{{ flag.field }}</td>
-                <td>
-                  <p-tag [severity]="getSeverity(flag.status)" [value]="flag.status"></p-tag>
-                </td>
-                <td>{{ flag.message }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </div>
+      <!-- Loading spinner if flags not yet loaded -->
+      <div *ngIf="!flags || flags.length === 0" class="text-center p-4">
+        <p>No flags to display</p>
       </div>
       
-      <!-- Only show "No flags" message if both red and green flags are empty -->
-      <div *ngIf="redFlags.length === 0 && greenFlags.length === 0">
-        <p>No flags to display.</p>
-      </div>
+      <!-- Flags Table -->
+      <p-table *ngIf="flags && flags.length > 0" 
+               [value]="flags" 
+               styleClass="p-datatable-sm p-datatable-striped"
+               [tableStyle]="{'min-width': '100%'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Category</th>
+            <th>Field</th>
+            <th>Status</th>
+            <th>Message</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-flag>
+          <tr>
+            <td>{{flag.category}}</td>
+            <td>{{flag.field}}</td>
+            <td>
+              <span [ngClass]="{'text-success fw-bold': flag.status === 'Green', 'text-danger fw-bold': flag.status === 'Red'}">
+                {{flag.status}}
+              </span>
+              <span *ngIf="flag.overridden && flag.status === 'Red'" class="ms-2 badge bg-warning">Overridden</span>
+            </td>
+            <td>{{flag.message}}</td>
+            <td>
+              <div class="d-flex">
+                <p-checkbox [(ngModel)]="flag.acknowledged" 
+                           [binary]="true"
+                           (onChange)="updateFlag(flag)"
+                           label="Acknowledge">
+                </p-checkbox>
+                
+                <p-checkbox *ngIf="flag.status === 'Red'"
+                           [(ngModel)]="flag.overridden" 
+                           [binary]="true"
+                           (onChange)="updateFlag(flag)"
+                           label="Override"
+                           class="ms-3">
+                </p-checkbox>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="5">
+              <strong>Eligibility Status:</strong> 
+              <span [ngClass]="{'text-success fw-bold': countRedFlags === 0, 'text-danger fw-bold': countRedFlags > 0}">
+                {{countRedFlags === 0 ? 'ELIGIBLE' : 'NOT ELIGIBLE'}}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </p-card>
   </div>
 </div>

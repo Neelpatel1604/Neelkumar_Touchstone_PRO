@@ -16,6 +16,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DOCUMENT } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { NgZone } from '@angular/core';
+import { TableModule } from 'primeng/table';
+import { CandidateResultsComponent } from '../candidate-results/candidate-results.component';
 
 import { Candidate } from '../../models/candidate.model';
 import { CandidateService } from '../../services/candidate.service';
@@ -42,7 +44,9 @@ import { Flag } from '../../models/flag.model';
     StepsModule,
     PanelModule,
     ProgressSpinnerModule,
-    SelectModule
+    SelectModule,
+    TableModule,
+    CandidateResultsComponent
   ],
   providers: [MessageService, CandidateService],
   templateUrl: './candidate-form.components.html',
