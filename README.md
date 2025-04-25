@@ -51,6 +51,10 @@ This project consists of a medical candidate assessment system with flagging cap
    ```bash
    ng serve
    ```
+   OR
+   ```bash
+   npm start
+   ```
    The application will be available at http://localhost:4200
 
 ## Usage
