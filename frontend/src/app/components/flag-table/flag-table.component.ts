@@ -85,6 +85,9 @@ export class FlagTableComponent implements OnInit, OnChanges, AfterViewInit {
       console.log('FlagTable received candidateId:', this.candidateId);
       console.log('FlagTable received flags count:', this.evaluationResult?.flags?.length || 0);
     }
+
+    console.log('Flag-table received flags:', this.flags);
+    console.log('Flag-table received candidateId:', this.candidateId);
   }
 
   private renderInChunks() {

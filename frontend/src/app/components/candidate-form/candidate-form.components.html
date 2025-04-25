@@ -305,14 +305,27 @@
         </form>
     </p-card>
     
-    <!-- Flag Table -->
-    <div *ngIf="evaluationResult && evaluationResult.flags && evaluationResult.flags.length > 0">
-        <!-- Add debug output to verify data -->
-        <p>Debug: {{evaluationResult.flags.length}} flags found</p>
-        
-        <app-flag-table 
-            [flags]="evaluationResult.flags"
-            [candidateId]="candidateId">
-        </app-flag-table>
+    <!-- Add this after the form section -->
+    <div *ngIf="evaluationResult && !submitting" class="mt-4">
+        <p-card header="Evaluation Results">
+            <div class="evaluation-summary">
+                <h3>Eligibility: 
+                    <span [class.text-success]="evaluationResult.isEligible" 
+                          [class.text-danger]="!evaluationResult.isEligible">
+                        {{evaluationResult.isEligible ? 'Eligible' : 'Not Eligible'}}
+                    </span>
+                </h3>
+            </div>
+            
+            <!-- Make sure this is visible -->
+            <app-flag-table 
+                [flags]="evaluationResult.flags" 
+                [candidateId]="candidateId"
+                class="mt-3">
+            </app-flag-table>
+        </p-card>
     </div>
+
+    <!-- Add this somewhere visible on your form -->
+    <button type="button" pButton (click)="testFlagTable()" label="Test Flag Table" class="p-button-secondary"></button>
 </div>

@@ -252,10 +252,13 @@ export class CandidateFormComponent implements OnInit {
               
               this.cdr.detectChanges(); // Force update again
               
-              // Add debugging to see if flag-table component will be shown
-              console.log('Flag count:', this.evaluationResult?.flags?.length);
-              console.log('Should show flag-table:', 
-                this.evaluationResult && this.evaluationResult.flags && this.evaluationResult.flags.length > 0);
+              // Add this to scroll to evaluation results
+              setTimeout(() => {
+                const resultsElement = document.querySelector('.evaluation-summary');
+                if (resultsElement) {
+                  resultsElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }, 200);
             }, 100);
           } else {
             console.error('Response data is not in expected format:', response.data);
