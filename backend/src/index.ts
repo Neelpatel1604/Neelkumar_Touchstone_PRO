@@ -27,9 +27,6 @@ const candidateController = new CandidateController();
 // Routes
 app.use('/api/candidates', candidateRoutes);
 
-// Direct /evaluate route for convenience - COMMENT THIS OUT TO AVOID CONFUSION
-// app.post('/evaluate', validateCandidateData, candidateController.evaluateCandidate);
-
 // Base route
 app.get('/', (req, res) => {
   res.send('Flagging System API is running...');

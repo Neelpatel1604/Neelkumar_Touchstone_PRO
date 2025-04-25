@@ -1,4 +1,3 @@
-// frontend/src/app/services/candidate.service.ts (updated)
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, timeout, catchError, throwError, retry } from 'rxjs';

@@ -1,4 +1,4 @@
-// backend/src/models/Flag.ts (updated)
+
 export type FlagType = 'Red' | 'Green';
 
 export interface Flag {

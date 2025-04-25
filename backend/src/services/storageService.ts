@@ -1,4 +1,4 @@
-// New file: backend/src/services/storageService.ts
+
 import fs from 'fs';
 import path from 'path';
 import { Candidate } from '../models/Candidate';

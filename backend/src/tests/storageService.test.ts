@@ -1,4 +1,4 @@
-// Complete updated StorageService.test.ts
+
 import { StorageService } from '../services/storageService';
 import { Candidate } from '../models/Candidate';
 import { EvaluationResult, Flag } from '../models/Flag';

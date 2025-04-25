@@ -1,4 +1,3 @@
-// frontend/src/app/models/flag.model.ts
 export interface ApiResponse {
   success: boolean;
   data?: any;

@@ -1,4 +1,3 @@
-// backend/src/controllers/candidateController.ts (updated)
 import { Request, Response } from 'express';
 import { FlaggingService } from '../services/flaggingService';
 import { StorageService } from '../services/storageService';

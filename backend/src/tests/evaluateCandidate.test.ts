@@ -1,4 +1,4 @@
-// backend/src/tests/evaluateCandidate.test.ts (with type fixes)
+
 import axios from 'axios';
 import { Flag } from '../models/Flag'; // Import the Flag type
 

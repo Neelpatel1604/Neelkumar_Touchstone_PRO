@@ -1,4 +1,4 @@
-// backend/src/routes/candidateRoutes.ts (updated)
+
 import express from 'express';
 import { CandidateController } from '../controllers/candidateController';
 import { validateCandidateData } from '../middleware/validateRequest';
